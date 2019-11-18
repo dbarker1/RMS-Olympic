@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """
+
 Dedalus script for 2D Anelastic Rayleigh-Benard convection.
 
 This script uses a Fourier basis in the x direction with periodic boundary
@@ -102,11 +103,11 @@ problem.add_equation("  (1-theta*z)*(dx(u) + wz) - theta*m*w = 0 ")
 ## NEED TO ADD phi AND Ta       # Done on 11/11/2019
 
 # new x-component of the momentum equatiion
-problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) + (Ta**(1/2))*(sin_phi*u) ) - dz_rho_ref*(uz + dx(w)) + dx(p) \
+problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) + (Ta**(1/2))*((sin_phi*v) - (cos_phi*w) ) - dz_rho_ref*(uz + dx(w)) + dx(p) \
              = - rho_ref*(u*dx(u) + w*uz ) ")
 
 # new y-component of the momentum equation
-problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + (Ta**(1/2))*((w*cos_phi) - (v*sin_phi)) ) - dz_rho_ref*vz = -rho_ref*(u*dx(v) + w*vz) ")
+problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + (Ta**(1/2))*u*sin_phi ) - dz_rho_ref*vz = -rho_ref*(u*dx(v) + w*vz) ")
 #problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + Ta**(1/2)*sin_phi*u ) - dz_rho_ref*vz = -rho_ref*(u*dx(v) + w*vz)")
 
 # new z-component of the momentum equation

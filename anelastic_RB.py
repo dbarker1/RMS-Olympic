@@ -97,9 +97,6 @@ problem.add_equation("uz - dz(u) = 0")
 problem.add_equation("vz - dz(v) = 0")     # Added 11/11/2019
 problem.add_equation("wz - dz(w) = 0")
 
-# mass continuity with rho_ref and dz(rho_ref) expanded analytically
-problem.add_equation("  (1-theta*z)*(dx(u) + wz) - theta*m*w = 0 ")
-
 ## NEED TO ADD phi AND Ta       # Done on 11/11/2019
 
 # mass continuity with rho_ref and dz(rho_ref) expanded analytically

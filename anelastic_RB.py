@@ -122,8 +122,7 @@ problem.add_equation(" rho_ref*T_ref*( dt(w) - X*s - (4/3)*dz(wz) - dx(dx(w)) - 
 # entropy diffusion equation
 problem.add_equation("  T_ref*( Pr*dt(s) - dx(dx(s)) - dz(sz) ) + theta*(m+1)*sz \
                         = -Pr*T_ref*( u*dx(s) + w*sz )  \
-                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*(uz*uz + dx(w)*dx(w) + vz*vz + dx
-(v)*dx(v)) ) ")
+                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*(uz*uz + dx(w)*dx(w) + vz*vz + dx(v)*dx(v)) ) ")
 
 # Flux equations for use in analysis outputs
 problem.add_equation("  dz(L_buoy) = -s*rho_ref*w")

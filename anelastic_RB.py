@@ -126,7 +126,7 @@ problem.add_equation("  T_ref*( Pr*dt(s) - dx(dx(s)) - dz(sz) ) + theta*(m+1)*sz
 
 # Flux equations for use in analysis outputs
 problem.add_equation("  dz(L_buoy) = -s*rho_ref*w")
-problem.add_equation("  dz(L_diss) = -2*rho_ref*( (dx(u))**2 + wz**2 + (1/2)*( uz**2 + dx(w)**2 ) + dx(w)*uz - (1/3)*( dx(u) + wz )**2 " )
+problem.add_equation("  dz(L_diss) = -2*rho_ref*( (dx(u))**2 + wz**2 + (1/2)*( uz**2 + dx(w)**2 ) + dx(w)*uz - (1/3)*( dx(u) + wz )**2 )")
 
 
 # Flux equations for use in analysis outputs

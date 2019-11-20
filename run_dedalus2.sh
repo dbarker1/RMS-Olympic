@@ -3,12 +3,10 @@
 name=$1
 cores=$2
 
-git clone https://github.com/dbarker1/rm-history.txt
-mv rm-history.txt $name
+mkdir $name
 cd $name
-rm notes_RBconvection_script.pdf
+wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/Corrected_Rotation/anelastic_RB.py
 cp ~/run_param_file2.py .
-git checkout origin/Corrected_Rotation
 
 mpiexec -np $cores python3 $(pwd)/anelastic_RB.py
 rm -r __pycache__

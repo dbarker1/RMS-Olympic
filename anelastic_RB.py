@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """
+
 Dedalus script for 2D Anelastic Rayleigh-Benard convection.
 
 This script uses a Fourier basis in the x direction with periodic boundary
@@ -96,33 +97,29 @@ problem.add_equation("uz - dz(u) = 0")
 problem.add_equation("vz - dz(v) = 0")     # Added 11/11/2019
 problem.add_equation("wz - dz(w) = 0")
 
+## NEED TO ADD phi AND Ta       # Done on 11/11/2019
+
 # mass continuity with rho_ref and dz(rho_ref) expanded analytically
 problem.add_equation("  (1-theta*z)*(dx(u) + wz) - theta*m*w = 0 ")
 
-## NEED TO ADD phi AND Ta       # Done on 11/11/2019
+# New x-component of the momentum equation
+problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) + (Ta**(1/2))*( v*sin_phi )) + dx(p) \
+                        -dz_rho_ref*( uz + dx(w) )\
+                        = -rho_ref*( u*dx(u) + w*uz ) ")
 
-# new x-component of the momentum equatiion
-problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) + (Ta**(1/2))*(sin_phi*u) ) - dz_rho_ref*(uz + dx(w)) + dx(p) \
-             = - rho_ref*(u*dx(u) + w*uz ) ")
+# New y-component of the momentum equation
+problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + (Ta**(1/2))*( (w*cos_phi) - (u*sin_phi) ) )  \
+                        - dz_rho_ref*(vz) \
+                        = -rho_ref*(u*dx(v) + w*vz) ")
 
-# new y-component of the momentum equation
-problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + (Ta**(1/2))*((w*cos_phi) - (v*sin_phi)) ) - dz_rho_ref*vz = -rho_ref*(u*dx(v) + w*vz) ")
-#problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + Ta**(1/2)*sin_phi*u ) - dz_rho_ref*vz = -rho_ref*(u*dx(v) + w*vz)")
-
-# new z-component of the momentum equation
-problem.add_equation("  T_ref*rho_ref*( dt(w) - X*s - dx(dx(w)) - (1/3)*dx(uz) - (4/3)*dz(wz) - (Ta**(1/2))*cos_phi*u ) + T_ref*dz(p) + \
-             (2/3)*theta*m*rho_ref*(2*wz - dx(u)) + p*m*theta \
-             = T_ref*rho_ref*( - u*dx(w) - w*wz ) ")
-
-# new z-component of the momentum equation
-#problem.add_equation("  T_ref*rho_ref*( dt(w) - X*s - dx(dx(w)) - (1/3)*dx(uz) - (4/3)*dz(wz) - (Ta**(1/2))*cos_phi*u ) + T_ref*dz(p) + \
-#             (2/3)*(1 - theta*z)*m*theta*((1-theta*z)**(m-1))*( dx(u) - 2*wz ) + p*m*theta \
-#             = T_ref*rho_ref*( - u*dx(w) - w*wz ) ")
-
+# New z-component of the momentum equation
+problem.add_equation(" rho_ref*T_ref*( dt(w) - X*s - (4/3)*dz(wz) - dx(dx(w)) - (1/3)*dx(uz) - (Ta**(1/2))*(v*cos_phi) ) + T_ref*dz(p) + theta*m*p \
+                        + (2/3)*theta*m*rho_ref*( 2*wz - dx(u) ) \
+                        = -rho_ref*T_ref*( u*dx(w) + w*wz ) ")
 # entropy diffusion equation
 problem.add_equation("  T_ref*( Pr*dt(s) - dx(dx(s)) - dz(sz) ) + theta*(m+1)*sz \
-                        = -Pr*T_ref*( u*dx(s) + w*sz )    \
-                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*( (dx(v)*dx(v)) + vz**2 + uz*uz + dx(w)*dx(w))) ")
+                        = -Pr*T_ref*( u*dx(s) + w*sz )  \
+                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*(uz*uz + dx(w)*dx(w) + vz*vz + dx(v)*dx(v)) ) ")
 
 # Flux equations for use in analysis outputs
 problem.add_equation("  dz(L_buoy) = -s*rho_ref*w")

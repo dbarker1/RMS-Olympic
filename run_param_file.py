@@ -17,8 +17,8 @@ Ta = 1e4                            # Taylor number
 phi = np.pi/4
 theta = 1 - np.exp(-Np/m)           # Dimensionaless inverse T scale height
 
-initial_timestep = 1.5e-5                 # Initial timestep
-max_dt = 1e-4                         # max dt
+initial_timestep = 1.5e-5           # Initial timestep
+max_dt = 1e-4                       # max dt
 
 snapshot_freq = 1.5e-3              # Frequency snapshot files are outputted
 analysis_freq = 1.5e-4              # Frequency analysis files are outputted

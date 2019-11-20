@@ -5,7 +5,7 @@ cores=$2
 
 mkdir $name
 cd $name
-wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/Corrected_Rotation/anelastic_RB.py
+wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py
 cp ~/run_param_file2.py .
 
 mpiexec -np $cores python3 $(pwd)/anelastic_RB.py

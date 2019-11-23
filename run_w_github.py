@@ -1,5 +1,5 @@
 import subprocess as sp
-path_to_sim = "/home/dan/dedalus_sims"
+path_to_sim = "/home/djb236/dedalus_sims"
 CORES = 10
 import os
 
@@ -51,7 +51,7 @@ def print_all():
         out += param.name + " = " + param.val + "\n"
     return out
 
-f_op = open("run_param_file2.py", "r")
+f_op = open("/home/djb236/run_param_file2.py", "r")
 f_str = f_op.read()
 f_op.close()
 

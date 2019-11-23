@@ -73,28 +73,23 @@ for item in os.listdir(path_to_sim):
 
 name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
-sp.call("cd " + name, shell=True)
-sp.call("wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)
+sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)
 
-f_wr_op = open(path_to_sim + "/" + name + "/run_param_file2.py", "w")
+cwd = path_to_sim + "/" + name
+f_wr_op = open(cwd + "/run_param_file2.py", "w")
 f_wr_op.write(print_all())
 f_wr_op.close()
 
-sp.call("mpiexec -np " + str(CORES) + " python3 $(pwd)/anelastic_RB.py", shell=True)
-sp.call("rm -r __pycache__", shell=True)
-sp.call("cp -r raw_data raw_data_cp", shell=True)
+sp.call("mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
+sp.call("cd " + cwd + " && rm -r __pycache__ && cp -r raw_data raw_data_cp", shell=True)
 
-sp.call("merge.py raw_data/snapshots --cleanup", shell=True)
-sp.call("merge.py raw_data/analysis --cleanup", shell=True)
-sp.call("merge.py raw_data/run_parameters --cleanup", shell=True)
+sp.call("merge.py " + cwd + "/raw_data/snapshots --cleanup", shell=True)
+sp.call("merge.py " + cwd + "/raw_data/analysis --cleanup", shell=True)
+sp.call("merge.py " + cwd + "/raw_data/run_parameters --cleanup", shell=True)
 
 sp.call("merge_single.py " + name, shell=True)
 sp.call("plotting_snapshots.py " + name, shell=True)
 
 sp.call("mkdir -p ~/rm-history.txt/RESULTS" + param_path, shell=True)
-sp.call("cd " + name + "_figs", shell=True)
-sp.call("cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
-sp.call("cd ~/rm-history.txt", shell=True)
-sp.call("git add .", shell=True)
-sp.call("git commit -m '" + name + "'", shell=True)
-sp.call("git push")
+sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/", shell=True)
+sp.call("cd ~/rm-history.txt && git add . && git commit -m '" + name + "' && git push", shell=True)

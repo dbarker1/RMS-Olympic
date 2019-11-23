@@ -69,9 +69,9 @@ rot_no = 0
 for item in os.listdir(path_to_sim):
     if (item.find("rot") != -1):
         if (float(item.split("rot")[1]) > rot_no):
-            rot_no = float(item.split("rot")[1])
+            rot_no = int(item.split("rot")[1])
 
-name = "rot" + str(rot_no)
+name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
 sp.call("cd " + name, shell=True)
 sp.call("wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)

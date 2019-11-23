@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess as sp
 path_to_sim = "/home/djb236/dedalus_sims"
 CORES = 10

@@ -77,7 +77,7 @@ sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/rm-h
 
 cwd = path_to_sim + "/" + name
 f_wr_op = open(cwd + "/run_param_file2.py", "w")
-f_wr_op.write(print_all())
+f_wr_op.write("import numpy as np\n\n" + print_all())
 f_wr_op.close()
 
 sp.call("mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)

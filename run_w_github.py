@@ -80,7 +80,7 @@ f_wr_op = open(cwd + "/run_param_file2.py", "w")
 f_wr_op.write("import numpy as np\n\n" + print_all())
 f_wr_op.close()
 
-sp.call("mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
+sp.call("cd " + cwd + " && mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
 sp.call("cd " + cwd + " && rm -r __pycache__ && cp -r raw_data raw_data_cp", shell=True)
 
 sp.call("merge.py " + cwd + "/raw_data/snapshots --cleanup", shell=True)

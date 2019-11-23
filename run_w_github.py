@@ -55,17 +55,16 @@ def print_all():
 
 sp.call("cd ~/rm-history.txt && git checkout 2.5D_Rotation", shell=True)
 f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
-f_str = f_op.read()
+read_params(f_op.read())
 f_op.close()
 
-read_params(f_str)
 print("Initial parameters:")
 print(print_all())
 edit_param(input("Parameter to change: "))
 print("\nNew parameters:")
 print(print_all())
-param_path = "Np_" + get_val("Np",False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False)
-print(param_path)
+param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False)
+
 rot_no = 0
 for item in os.listdir(path_to_sim):
     if (item.find("rot") != -1):

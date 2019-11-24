@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 
 import subprocess as sp
+import sys
 path_to_sim = "/home/djb236/dedalus_sims"
-CORES = 10
 import os
+
+if (len(sys.argv) < 2):
+	print("Must provide number of cores")
+	exit(1)
+
+CORES = sys.argv[1]
 
 class Param:
     def __init__(self, name_in, val_in_dot):

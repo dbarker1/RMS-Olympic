@@ -63,12 +63,12 @@ def print_all():
     return out
 
 def print_msg(msg):
-	stars = ""
-	for char in range(len(msg) + 2):
-		stars += "*"
-	print(stars)
-	print(" " + msg + " ")
-	print(stars)
+    stars = ""
+    for char in range(len(msg) + 2):
+        stars += "*"
+    print(stars)
+    print(" " + msg + " ")
+    print(stars)
 
 f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
 read_params(f_op.read())
@@ -115,5 +115,5 @@ sp.call("cd " + cwd + " && plotting_snapshots.py " + name, shell=True)
 sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
 sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
 print_msg("Pushing to Github...")
-sp.call("cd ~/rm-history.txt && git add . && git commit -m '" + name + "' && git push", shell=True)
+sp.call("cd ~/rm-history.txt && git add . && git commit -m 'NEW: " + name + "' && git push", shell=True)
 print_msg("Done")

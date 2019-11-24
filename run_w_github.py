@@ -66,7 +66,7 @@ def print_msg(msg):
     stars = ""
     for char in range(len(msg) + 2):
         stars += "*"
-    print(stars)
+    print("\n\n" + stars)
     print(" " + msg + " ")
     print(stars)
 

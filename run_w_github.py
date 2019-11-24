@@ -62,6 +62,14 @@ def print_all():
         out += param.name + " = " + param.val + "\n"
     return out
 
+def print_msg(msg):
+	stars = ""
+	for char in range(len(msg) + 2):
+		stars += "*"
+	print(stars)
+	print(" " + msg + " ")
+	print(stars)
+
 f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()
@@ -81,6 +89,7 @@ for item in os.listdir(path_to_sim):
 
 name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
+print_msg("Getting anelastic script from Github...")
 sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)
 
 cwd = path_to_sim + "/" + name
@@ -88,16 +97,23 @@ f_wr_op = open(cwd + "/run_param_file2.py", "w")
 f_wr_op.write("import numpy as np\n\n" + print_all())
 f_wr_op.close()
 
+print_msg("Running dedalus...")
 sp.call("cd " + cwd + " && mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
+print_msg("Removing cache folder...")
 sp.call("cd " + cwd + " && rm -r __pycache__ && cp -r raw_data raw_data_cp", shell=True)
 
+print_msg("merge.py:")
 sp.call("merge.py " + cwd + "/raw_data/snapshots --cleanup", shell=True)
 sp.call("merge.py " + cwd + "/raw_data/analysis --cleanup", shell=True)
 sp.call("merge.py " + cwd + "/raw_data/run_parameters --cleanup", shell=True)
 
+print_msg("merge_single.py:")
 sp.call("cd " + cwd + " && merge_single.py " + name, shell=True)
+print_msg("plotting_snapshots.py:")
 sp.call("cd " + cwd + " && plotting_snapshots.py " + name, shell=True)
 
 sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
 sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
+print_msg("Pushing to Github...")
 sp.call("cd ~/rm-history.txt && git add . && git commit -m '" + name + "' && git push", shell=True)
+print_msg("Done")

@@ -62,7 +62,6 @@ def print_all():
         out += param.name + " = " + param.val + "\n"
     return out
 
-sp.call("cd ~/rm-history.txt", shell=True)
 f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()
@@ -98,7 +97,6 @@ sp.call("merge.py " + cwd + "/raw_data/run_parameters --cleanup", shell=True)
 
 sp.call("cd " + cwd + " && merge_single.py " + name, shell=True)
 sp.call("cd " + cwd + " && plotting_snapshots.py " + name, shell=True)
-sp.call("mv " + name + "_figs " + name, shell=True)
 
 sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
 sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)

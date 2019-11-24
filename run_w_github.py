@@ -32,7 +32,7 @@ def read_params(string):
     for line in string.split("\n"):
         if (line != ""):
             if (line[0] != '#' and line[:6] != "import" and line != ""):
-                if (line.split("=")[0] == "theta"):
+                if (line.split("=")[0].find("theta") != -1):
                     params.append(Param("theta", "1 - np.exp(-Np/m)"))
                 else:
                     params.append(Param(line.split("=")[0], line[line.find("="):].split(" ")[1]))

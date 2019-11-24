@@ -1,4 +1,4 @@
 # RESULTS FOLDER
-Submit animated gifs instead of loads of fig_xxx.png.........
 
+Folder structure
 `RESULTS/Np_xxx/Ra_xxx/Ta_xxx`

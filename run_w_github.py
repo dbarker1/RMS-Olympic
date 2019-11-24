@@ -62,7 +62,7 @@ def print_all():
         out += param.name + " = " + param.val + "\n"
     return out
 
-sp.call("cd ~/rm-history.txt && git checkout 2.5D_Rotation", shell=True)
+sp.call("cd ~/rm-history.txt", shell=True)
 f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()

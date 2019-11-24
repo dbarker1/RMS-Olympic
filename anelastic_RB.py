@@ -1,3 +1,5 @@
+## 2D RAYLEIGH-BENARD -- NO LONGER NEEDED FOR PROJECT
+
 """
 Dedalus script for 2D Anelastic Rayleigh-Benard convection.
 

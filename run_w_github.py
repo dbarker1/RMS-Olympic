@@ -49,7 +49,7 @@ def get_val(param_str, print_dot):
             if (print_dot):
                 return param.val
             else:
-		if (param.val.find("np.pi" != -1):
+		if (param.val.find("np.pi") != -1):
 			return "pi_" + param[len("np.pi")+1:]
                 return change_to_ps(param.val)
 

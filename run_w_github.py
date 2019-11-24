@@ -79,7 +79,7 @@ print(print_all())
 edit_param(input("Parameter to change: "))
 print("\nNew parameters:")
 print(print_all())
-param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False)
+param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False) + "Lat_" + get_val("phi", False)
 
 rot_no = 0
 for item in os.listdir(path_to_sim):

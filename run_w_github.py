@@ -99,6 +99,6 @@ sp.call("merge.py " + cwd + "/raw_data/run_parameters --cleanup", shell=True)
 sp.call("merge_single.py " + name, shell=True)
 sp.call("plotting_snapshots.py " + name, shell=True)
 
-sp.call("mkdir -p ~/rm-history.txt/RESULTS" + param_path, shell=True)
+sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
 sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/", shell=True)
 sp.call("cd ~/rm-history.txt && git add . && git commit -m '" + name + "' && git push", shell=True)

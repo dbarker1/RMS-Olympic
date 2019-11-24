@@ -89,16 +89,21 @@ f_wr_op = open(cwd + "/run_param_file2.py", "w")
 f_wr_op.write("import numpy as np\n\n" + print_all())
 f_wr_op.close()
 
-sp.call("mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
+sp.call("cd " + cwd + " && mpiexec -np " + str(CORES) + " python3 " + cwd + "/anelastic_RB.py", shell=True)
 sp.call("cd " + cwd + " && rm -r __pycache__ && cp -r raw_data raw_data_cp", shell=True)
 
-sp.call("merge.py " + cwd + "/raw_data/snapshots --cleanup", shell=True)
-sp.call("merge.py " + cwd + "/raw_data/analysis --cleanup", shell=True)
-sp.call("merge.py " + cwd + "/raw_data/run_parameters --cleanup", shell=True)
+sp.call("merge.py " + cwd + "raw_data/snapshots --cleanup", shell=True)
+sp.call("merge.py " + cwd + "raw_data/analysis --cleanup", shell=True)
+sp.call("merge.py " + cwd + "raw_data/run_parameters --cleanup", shell=True)
 
 sp.call("merge_single.py " + name, shell=True)
 sp.call("plotting_snapshots.py " + name, shell=True)
+sp.call("mv " + name + "_figs " + name, shell=True)
 
 sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
+<<<<<<< HEAD
+sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
+=======
 sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/", shell=True)
+>>>>>>> 7d749c1b247feb3bdbd80f1c78d3d72a114d7a0a
 sp.call("cd ~/rm-history.txt && git add . && git commit -m '" + name + "' && git push", shell=True)

@@ -50,7 +50,7 @@ def get_val(param_str, print_dot):
                 return param.val
             else:
                 if (param.val.find("np.pi") != -1):
-                      return "pi_" + param[len("np.pi")+1:]
+                      return "pi_" + param.val[len("np.pi")+1:]
                 return change_to_ps(param.val)
 
 def edit_param(name):
@@ -81,7 +81,7 @@ print(print_all())
 edit_param(input("Parameter to change: "))
 print("\nNew parameters:")
 print(print_all())
-param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False) + "Lat_" + get_val("phi", False)
+param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False) + "/Lat_" + get_val("phi", False)
 
 rot_no = 0
 for item in os.listdir(path_to_sim):

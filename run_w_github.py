@@ -72,7 +72,7 @@ def print_msg(msg):
     print(" " + msg + " ")
     print(stars)
 
-f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
+f_op = open("/home/djb236/RMS-Olympic/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()
 
@@ -92,7 +92,7 @@ for item in os.listdir(path_to_sim):
 name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
 print_msg("Getting anelastic script from Github...")
-sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)
+sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/RMS-Olympic/2.5D_Rotation/anelastic_RB.py", shell=True)
 
 cwd = path_to_sim + "/" + name
 f_wr_op = open(cwd + "/run_param_file2.py", "w")
@@ -114,8 +114,8 @@ sp.call("cd " + cwd + " && merge_single.py " + name, shell=True)
 print_msg("plotting_snapshots.py:")
 sp.call("cd " + cwd + " && plotting_snapshots.py " + name, shell=True)
 
-sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
-sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
+sp.call("mkdir -p ~/RMS-Olympic/RESULTS/" + param_path, shell=True)
+sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/RMS-Olympic/RESULTS/" + param_path, shell=True)
 print_msg("Pushing to Github...")
-sp.call("cd ~/rm-history.txt && git add . && git commit -m 'NEW: " + name + "' && git push", shell=True)
+sp.call("cd ~/RMS-Olympic && git add . && git commit -m 'NEW: " + name + "' && git push", shell=True)
 print_msg("Done")

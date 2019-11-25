@@ -49,8 +49,8 @@ def get_val(param_str, print_dot):
             if (print_dot):
                 return param.val
             else:
-		if (param.val.find("np.pi") != -1):
-			return "pi_" + param[len("np.pi")+1:]
+                if (param.val.find("np.pi") != -1):
+                      return "pi_" + param.val[len("np.pi")+1:]
                 return change_to_ps(param.val)
 
 def edit_param(name):
@@ -72,7 +72,7 @@ def print_msg(msg):
     print(" " + msg + " ")
     print(stars)
 
-f_op = open("/home/djb236/rm-history.txt/run_param_file2.py", "r")
+f_op = open("/home/djb236/RMS-Olympic/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()
 
@@ -81,7 +81,7 @@ print(print_all())
 edit_param(input("Parameter to change: "))
 print("\nNew parameters:")
 print(print_all())
-param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False) + "Lat_" + get_val("phi", False)
+param_path = "Np_" + get_val("Np", False) + "/Ra_" + get_val("Ra", False) + "/Ta_" + get_val("Ta", False) + "/Lat_" + get_val("phi", False)
 
 rot_no = 0
 for item in os.listdir(path_to_sim):
@@ -92,7 +92,7 @@ for item in os.listdir(path_to_sim):
 name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
 print_msg("Getting anelastic script from Github...")
-sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/rm-history.txt/2.5D_Rotation/anelastic_RB.py", shell=True)
+sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/RMS-Olympic/2.5D_Rotation/anelastic_RB.py", shell=True)
 
 cwd = path_to_sim + "/" + name
 f_wr_op = open(cwd + "/run_param_file2.py", "w")
@@ -114,8 +114,8 @@ sp.call("cd " + cwd + " && merge_single.py " + name, shell=True)
 print_msg("plotting_snapshots.py:")
 sp.call("cd " + cwd + " && plotting_snapshots.py " + name, shell=True)
 
-sp.call("mkdir -p ~/rm-history.txt/RESULTS/" + param_path, shell=True)
-sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/rm-history.txt/RESULTS/" + param_path, shell=True)
+sp.call("mkdir -p ~/RMS-Olympic/RESULTS/" + param_path, shell=True)
+sp.call("cd " + cwd + "/" + name + "_figs && cp -r * ~/RMS-Olympic/RESULTS/" + param_path, shell=True)
 print_msg("Pushing to Github...")
-sp.call("cd ~/rm-history.txt && git add . && git commit -m 'NEW: " + name + "' && git push", shell=True)
+sp.call("cd ~/RMS-Olympic && git add . && git commit -m 'NEW: " + name + "' && git push", shell=True)
 print_msg("Done")

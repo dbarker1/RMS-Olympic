@@ -12,9 +12,9 @@ Nz = 64
 Pr = 1.                             # Prandtl number
 Pm = 1.                             # Magnetic Prandtl number
 Ra = 3.8e5                          # Rayleigh number
-Np = 1                              # Number of density scale heights
+Np = 0.5                            # Number of density scale heights
 m = 1.5                             # Polytropic index
-Ta = 1e4                            # Taylor number
+Ta = 0                              # Taylor number
 phi = np.pi/4
 theta = 1 - np.exp(-Np/m)           # Dimensionaless inverse T scale height
 

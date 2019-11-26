@@ -19,6 +19,8 @@ class Param:
             self.val_p = change_to_ps(self.val)
 
     def change_param(self, val_in):
+        if (self.name == "end_sim_time"):
+            print_msg("  REMEMBER TO ALSO CHANGE plotting_snapshots.py!!  ")
         self.val = val_in
         if (val_in.find(".") != -1):
             self.val_p = change_to_ps(self.val)

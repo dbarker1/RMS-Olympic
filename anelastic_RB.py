@@ -243,7 +243,7 @@ try:
             # Prints various parameters to terminal upon starting the simulation
             logger.info('Parameter values imported form run_param_file.py:')
             logger.info('Lx = {}, Lz = {}; (Resolution of {},{})'.format(Lx, Lz, Nx, Nz))
-            logger.info('Ra = {}, Pr = {}, Np = {}'.format(Ra, Pr, Np))
+            logger.info('Ra = {}, Pr = {}, Np = {}, Ta = {}'.format(Ra, Pr, Np, Ta))
             logger.info('Snapshot files outputted every {}'.format(rpf.snapshot_freq))
             logger.info('Analysis files outputted every {}'.format(rpf.analysis_freq))
             if rpf.end_sim_time != np.inf:

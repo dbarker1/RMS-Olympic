@@ -74,6 +74,7 @@ def print_msg(msg):
     print(" " + msg + " ")
     print(stars)
 
+sp.call("cd ~/RMS-Olympic && git checkout master", shell=True)
 f_op = open("/home/djb236/RMS-Olympic/run_param_file2.py", "r")
 read_params(f_op.read())
 f_op.close()

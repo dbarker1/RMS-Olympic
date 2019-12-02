@@ -1,6 +1,7 @@
-## 2D RAYLEIGH-BENARD -- NO LONGER NEEDED FOR PROJECT
+#!/usr/bin/env python3
 
 """
+
 Dedalus script for 2D Anelastic Rayleigh-Benard convection.
 
 This script uses a Fourier basis in the x direction with periodic boundary
@@ -25,6 +26,7 @@ from mpi4py import MPI
 import time
 import matplotlib.pyplot as plt
 import sys
+import os
 
 from dedalus import public as de
 from dedalus.extras import flow_tools
@@ -33,9 +35,10 @@ import pathlib
 import logging
 logger = logging.getLogger(__name__)
 
-import run_param_file as rpf   # Imports a parameter file "run_param_file2.py"
+sys.path.append(os.getcwd())
+import run_param_file2 as rpf   # Imports a parameter file "run_param_file2.py"        # Changed to run_param_file2 11/11/2019
 
-save_direc = sys.argv[1] + "_raw_data/"
+save_direc = "raw_data/"
 pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
 
 
@@ -45,7 +48,9 @@ Nx, Nz = rpf.Nx, rpf.Nz
 Pr = rpf.Pr
 Ra = rpf.Ra
 Np = rpf.Np
+Ta = rpf.Ta     # Added variable 11/11/2019
 m = rpf.m
+phi = rpf.phi
 theta = rpf.theta
 
 # Create bases and domain
@@ -55,7 +60,7 @@ domain = de.Domain([x_basis, z_basis], grid_dtype=np.float64)  # Defining our do
 z = domain.grid(1, scales=1)                                   # accessing the z values
 
 # 2D Anelastic hydrodynamics
-problem = de.IVP(domain, variables=['p', 's', 'u', 'w', 'sz', 'uz', 'wz', 'L_buoy', 'L_diss'])
+problem = de.IVP(domain, variables=['p', 's', 'u', 'v', 'w', 'sz', 'uz', 'vz', 'wz', 'L_buoy', 'L_diss'])     # Added 'v' 11/11/2019
 problem.meta['p','s','u','w']['z']['dirichlet'] = True
 
 # Defining model parameters
@@ -63,10 +68,14 @@ problem.parameters['Lx'] = Lx
 problem.parameters['Lz'] = Lz
 problem.parameters['Ra'] = Ra
 problem.parameters['Pr'] = Pr
+problem.parameters['Ta'] = Ta       # Added 11/11/2019
 problem.parameters['m'] = m
 problem.parameters['theta'] = theta
 problem.parameters['X'] = Ra/Pr
 problem.parameters['Y'] = (Pr*Pr*theta) / Ra
+problem.parameters['phi'] = phi
+problem.parameters['cos_phi'] = np.cos(phi)
+problem.parameters['sin_phi'] = np.sin(phi)
 
 # Non-constant coeffiecents
 rho_ref = domain.new_field(name='rho_ref')
@@ -85,39 +94,49 @@ problem.parameters['dz_rho_ref'] = dz_rho_ref   # z-derivative of rho_ref
 # Defining d/dz of s, u, and w for reducing our equations to first order
 problem.add_equation("sz - dz(s) = 0")
 problem.add_equation("uz - dz(u) = 0")
+problem.add_equation("vz - dz(v) = 0")     # Added 11/11/2019
 problem.add_equation("wz - dz(w) = 0")
+
+## NEED TO ADD phi AND Ta       # Done on 11/11/2019
 
 # mass continuity with rho_ref and dz(rho_ref) expanded analytically
 problem.add_equation("  (1-theta*z)*(dx(u) + wz) - theta*m*w = 0 ")
 
-# x-component of the momentum equation
-problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) ) + dx(p) \
-                        - dz_rho_ref*( uz + dx(w) ) \
-                        = -rho_ref*( u *dx(u) + w*uz ) ")
+# New x-component of the momentum equation
+problem.add_equation("  rho_ref*( dt(u) - (4/3)*dx(dx(u)) - dz(uz) - (1/3)*dx(wz) + (Ta**(1/2))*( v*sin_phi )) + dx(p) \
+                        -dz_rho_ref*( uz + dx(w) )\
+                        = -rho_ref*( u*dx(u) + w*uz ) ")
 
-# z-component of the momentum equation
-problem.add_equation("  rho_ref*T_ref*( dt(w) - X*s - (4/3)*dz(wz) - dx(dx(w)) - (1/3)*dx(uz) ) + T_ref*dz(p) + theta*m*p \
+# New y-component of the momentum equation
+problem.add_equation("  rho_ref*( dt(v) - dx(dx(v)) - dz(vz) + (Ta**(1/2))*( (w*cos_phi) - (u*sin_phi) ) )  \
+                        - dz_rho_ref*(vz) \
+                        = -rho_ref*(u*dx(v) + w*vz) ")
+
+# New z-component of the momentum equation
+problem.add_equation(" rho_ref*T_ref*( dt(w) - X*s - (4/3)*dz(wz) - dx(dx(w)) - (1/3)*dx(uz) - (Ta**(1/2))*(v*cos_phi) ) + T_ref*dz(p) + theta*m*p \
                         + (2/3)*theta*m*rho_ref*( 2*wz - dx(u) ) \
                         = -rho_ref*T_ref*( u*dx(w) + w*wz ) ")
 # entropy diffusion equation
 problem.add_equation("  T_ref*( Pr*dt(s) - dx(dx(s)) - dz(sz) ) + theta*(m+1)*sz \
-                        = -Pr*T_ref*( u*dx(s) + w*sz )    \
-                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*(uz*uz + dx(w)*dx(w))) ")
+                        = -Pr*T_ref*( u*dx(s) + w*sz )  \
+                        + 2*Y*( dx(u)*dx(u) + wz*wz + uz*dx(w) - (1/3)*(dx(u)+wz)*(dx(u)+wz) + (1/2)*(uz*uz + dx(w)*dx(w) + vz*vz + dx(v)*dx(v)) ) ")
 
 # Flux equations for use in analysis outputs
 problem.add_equation("  dz(L_buoy) = -s*rho_ref*w")
 problem.add_equation("  dz(L_diss) = -2*rho_ref*( (dx(u))**2 + wz**2 + (1/2)*( uz**2 + dx(w)**2 ) + dx(w)*uz - (1/3)*( dx(u) + wz )**2 )")
 
-problem.add_bc("left(w) = 0")            # Impermeable bottom boundary
+problem.add_bc("left(w) = 0")            		        # Impermeable bottom boundary
 problem.add_bc("right(w) = 0", condition="(nx != 0)")   # Impermeable top boundary
 problem.add_bc("right(p) = 0", condition="(nx == 0)")   # Required for equations to be well-posed - see https://bit.ly/2nPVWIg for a related discussion
-problem.add_bc("left(uz) = 0")           # Stress-free bottom boundary
-problem.add_bc("right(uz) = 0")          # Stress-free top boundary
-problem.add_bc("right(s) = 0")           # Fixed entropy at upper boundary, arbitarily set to 0
-problem.add_bc("left(sz) = -1")          # Fixed flux at bottom boundary, F = F_cond
+problem.add_bc("left(uz) = 0")           		        # Stress-free bottom boundary
+problem.add_bc("right(uz) = 0")          		        # Stress-free top boundary
+problem.add_bc("right(vz) = 0")				            # Stress-free right vz 		                            # Added 11/11/2019
+problem.add_bc("left(vz) = 0")				            # Stress-free left vz		                            # Added 11/11/2019
+problem.add_bc("right(s) = 0")           		        # Fixed entropy at upper boundary, arbitarily set to 0
+problem.add_bc("left(sz) = -1")          		        # Fixed flux at bottom boundary, F = F_cond
 
-problem.add_bc("left(L_buoy) = 0")       # BC for L_buoy for partial depth integration
-problem.add_bc("left(L_diss) = 0")       # BC for L_diss for partial depth integration
+problem.add_bc("left(L_buoy) = 0")       		# BC for L_buoy for partial depth integration
+problem.add_bc("left(L_diss) = 0")       		# BC for L_diss for partial depth integration
 
 # Build solver
 solver = problem.build_solver(de.timesteppers.RK222)
@@ -203,6 +222,7 @@ run_parameters.add_task(Ra, name="Ra")
 run_parameters.add_task(Pr, name="Pr")
 run_parameters.add_task(Np, name="Np")
 run_parameters.add_task(m,  name="m")
+run_parameters.add_task(Ta, name="Ta")
 run_parameters.add_task(Nx, name="Nx")
 run_parameters.add_task(Nz, name="Nz")
 run_parameters.add_task("z", layout='g', name="z_grid")
@@ -223,7 +243,7 @@ try:
             # Prints various parameters to terminal upon starting the simulation
             logger.info('Parameter values imported form run_param_file.py:')
             logger.info('Lx = {}, Lz = {}; (Resolution of {},{})'.format(Lx, Lz, Nx, Nz))
-            logger.info('Ra = {}, Pr = {}, Np = {}'.format(Ra, Pr, Np))
+            logger.info('Ra = {}, Pr = {}, Np = {}, Ta = {}'.format(Ra, Pr, Np, Ta))
             logger.info('Snapshot files outputted every {}'.format(rpf.snapshot_freq))
             logger.info('Analysis files outputted every {}'.format(rpf.analysis_freq))
             if rpf.end_sim_time != np.inf:

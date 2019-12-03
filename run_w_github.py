@@ -101,7 +101,7 @@ for item in os.listdir(path_to_sim):
 name = "rot" + str(rot_no+1)
 sp.call("mkdir " + name, shell=True)
 print_msg("Getting anelastic script from Github...")
-sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/RMS-Olympic/2.5D_Rotation/anelastic_RB.py", shell=True)
+sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/RMS-Olympic/DAN/anelastic_RB.py", shell=True)
 
 cwd = path_to_sim + "/" + name
 f_wr_op = open(cwd + "/run_param_file2.py", "w")

@@ -44,7 +44,7 @@ Pr = rpf.Pr
 Ra = rpf.Ra
 Np = rpf.Np
 Ta = rpf.Ta
-Lat = rpf.latitude
+Lat = rpf.phi
 m = rpf.m
 theta = rpf.theta
 

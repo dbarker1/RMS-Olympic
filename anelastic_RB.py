@@ -183,8 +183,11 @@ analysis.add_task("integ(s,'y')/Ly", layout='g', name='<s>_y')
 analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layout='g', name='Re')
 
 ## Calculate Reynolds stress
-analysis.add_task("integ( integ(u , 'y')/Ly, 'z')/Lz", latout='g', name='u_avg' )
-analysis.add_task("integ( integ(w , 'y')/Ly, 'z')/Lz", latout='g', name='w_avg' )
+analysis.add_task("integ( integ(u , 'y')/Ly, 'z')/Lz", layout='g', name='u_avg' )
+analysis.add_task("integ( integ(w , 'y')/Ly, 'z')/Lz", layout='g', name='w_avg' )
+analysis.add_task("u - u_avg", layout='g', name='u_var')
+analysis.add_task("w - w_avg", layout='g', name='w_var')
+analysis.add_task("u_var * w_var", layout='g', name='R_stress')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')

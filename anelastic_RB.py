@@ -71,6 +71,12 @@ problem.parameters['X'] = Ra/Pr
 problem.parameters['Y'] = (Pr*Pr*theta) / Ra
 problem.parameters['T'] = Ta**(1/2)
 
+problem.parameters['u_avg'] = 0
+problem.parameters['w_avg'] = 0
+problem.parameters['u_var'] = 0
+problem.parameters['w_var'] = 0
+problem.parameters['R_stress'] = 0
+
 # Non-constant coeffiecents
 rho_ref = domain.new_field(name='rho_ref')
 rho_ref['g'] = (1-theta*z)**m

@@ -65,6 +65,7 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
 #   Tx_z = np.array(file['tasks']['<Tz>_x'][:,0,:])
     s = np.array(file['tasks']['<s>_x'])[:,0,:]
     Re = np.array(file['tasks']['Re'])[:,0,:]						## NEW!!
+    R_stress = np.array(file['tasks']['R_stress'])[:,0,:]
     Sx_all = np.array(file['tasks']['<s>_x'])
 
 with h5py.File(direc + "snapshots/snapshots_" + run_name + ".h5", mode='r') as file:
@@ -120,6 +121,15 @@ plt.xlabel(r"Time / $\tau_\nu$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(0, np.max(Re)*1.1)
 plt.savefig(save_direc + run_name + "_Re")
+plt.close()
+plt.clf()
+
+plt.plot(ana_t,R_stress, 'r')
+plt.ylabel("R.S.")
+plt.xlabel(r"Time / $\tau_\nu$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(0, np.max(R_stress)*1.1)
+plt.savefig(save_direc + run_name + "_RS")
 plt.close()
 plt.clf()
 

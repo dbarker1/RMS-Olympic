@@ -257,7 +257,7 @@ try:
         if (solver.iteration-1) % 10 == 0:
             # Prints progress information include maximum Reynolds number every 10 iterations
             logger.info('Iteration: %i, Time: %e, dt: %e' %(solver.iteration, solver.sim_time, dt))
-            logger.info('Max Re = %f, Max R.S. = %f' %(flow.max('Re'), flow.max('R_stress')))
+            logger.info('Max Re = %f' %flow.max('Re'))
 
 except:
     logger.error('Exception raised, triggering end of main loop.')

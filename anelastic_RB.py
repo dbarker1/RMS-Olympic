@@ -41,11 +41,16 @@ pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
 Ly, Lz = rpf.Lx, rpf.Lz
 Ny, Nz = rpf.Nx, rpf.Nz
 Pr = rpf.Pr
-Ra = float(sys.argv[2]) #rpf.Ra
-Np = float(sys.argv[1]) #rpf.Np
-Ta = float(sys.argv[3]) #rpf.Ta
-Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
+Ra = rpf.Ra
+Np = rpf.Np
+Ta = rpf.Ta
+Lat = rpf.phi
 m = rpf.m
+#Ra = float(sys.argv[2]) #rpf.Ra
+#Np = float(sys.argv[1]) #rpf.Np
+#Ta = float(sys.argv[3]) #rpf.Ta
+#Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
+#m = rpf.m
 #theta = rpf.theta
 theta = 1 - np.exp(-Np/m)
 

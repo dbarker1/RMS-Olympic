@@ -183,6 +183,9 @@ analysis.add_task("integ(s,'y')/Ly", layout='g', name='<s>_y')
 # Mean Reynolds number
 analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layout='g', name='Re')
 
+## Calculate Reynolds stress
+analysis.add_task("(u - (integ( integ(u , 'y')/Ly, 'z')/Lz)) * (w - (integ( integ(w , 'y')/Ly, 'z')/Lz))", layout='g', name='R_stress')
+
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')
 analysis.add_task("integ((-1)*rho_ref*T_ref*sz, 'y')/Ly", layout='g', name='L_cond')

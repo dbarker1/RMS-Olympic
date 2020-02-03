@@ -202,7 +202,7 @@ analysis.add_task("(integ(rho_ref*w*T_ref*s, 'y')*Pr + \
                     integ(p*w, 'y')*((Pr*Pr*theta)/Ra))/Ly", layout='g', name='L_enth')
 
 # Magnitude of viscous dissipation as calculated by equation 5 (E_def) and equation 24 (E_F_conv) - See C&B '17
-analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)*wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
+analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
                                 , 'y'), 'z')*(((Pr*Pr*theta)/Ra )/(Ly*Lz)) ", layout='g', name='E_def')
 analysis.add_task(" integ( (integ(rho_ref*T_ref*s*w,'y')/Ly)/T_ref, 'z')*Pr*theta/Lz ", layout='g', name='E_F_conv')
 

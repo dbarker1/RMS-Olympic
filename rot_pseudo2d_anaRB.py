@@ -184,9 +184,9 @@ analysis.add_task("integ(s,'y')/Ly", layout='g', name='<s>_y')
 analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layout='g', name='Re')
 
 ## Calculate Reynolds stress
-analysis.add_task("(u - integ(u, 'x')/Lx) * (v - integ(v, 'y')/Ly)", layout='g', name='RS_xy')
-analysis.add_task("(u - integ(u, 'x')/Lx) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_xz')
-analysis.add_task("(v - integ(v, 'y')/Ly) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_yx')
+#analysis.add_task("(u - integ(u, 'x')/Lx) * (v - integ(v, 'y')/Ly)", layout='g', name='RS_xy')
+#analysis.add_task("(u - integ(u, 'x')/Lx) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_xz')
+#analysis.add_task("(v - integ(v, 'y')/Ly) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_yx')
 analysis.add_task("(v - integ(v, 'y')/Ly) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_yz')
 
 

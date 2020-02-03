@@ -31,7 +31,7 @@ import pathlib
 import logging
 logger = logging.getLogger(__name__)
 
-import run_param_file2 as rpf   # Imports a parameter file "run_param_file.py"
+import run_param_file as rpf   #Imports a parameter file "run_param_file.py"
 
 save_direc = "raw_data/"
 pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
@@ -41,12 +41,13 @@ pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
 Ly, Lz = rpf.Lx, rpf.Lz
 Ny, Nz = rpf.Nx, rpf.Nz
 Pr = rpf.Pr
-Ra = rpf.Ra
-Np = rpf.Np
-Ta = rpf.Ta
-Lat = rpf.phi
+Ra = float(sys.argv[2]) #rpf.Ra
+Np = float(sys.argv[1]) #rpf.Np
+Ta = float(sys.argv[3]) #rpf.Ta
+Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
 m = rpf.m
-theta = rpf.theta
+#theta = rpf.theta
+theta = 1 - np.exp(-Np/m)
 
 # Create bases and domain
 y_basis = de.Fourier('y', Ny, interval=(0, Ly), dealias=3/2)   # Fourier basis in the x
@@ -70,12 +71,6 @@ problem.parameters['theta'] = theta
 problem.parameters['X'] = Ra/Pr
 problem.parameters['Y'] = (Pr*Pr*theta) / Ra
 problem.parameters['T'] = Ta**(1/2)
-
-#problem.parameters['u_avg'] = 0
-#problem.parameters['w_avg'] = 0
-#problem.parameters['u_var'] = 0
-#problem.parameters['w_var'] = 0
-#problem.parameters['R_stress'] = 0
 
 # Non-constant coeffiecents
 rho_ref = domain.new_field(name='rho_ref')
@@ -130,7 +125,7 @@ problem.add_bc("right(uz) = 0")          # Stress-free top boundary
 problem.add_bc("left(vz) = 0")
 problem.add_bc("right(vz) = 0")
 problem.add_bc("right(s) = 0")           # Fixed entropy at upper boundary, arbitarily set to 0
-problem.add_bc("left(sz) = -1")          # Fixed flux at bottom boundary, F = F_cond
+problem.add_bc("left(sz) = -1")          #Fixed flux at bottom boundary, F = F_cond
 
 problem.add_bc("left(L_buoy) = 0")       # BC for L_buoy for partial depth integration
 problem.add_bc("left(L_diss) = 0")       # BC for L_diss for partial depth integration
@@ -224,6 +219,8 @@ run_parameters.add_task(Np, name="Np")
 run_parameters.add_task(m,  name="m")
 run_parameters.add_task(Ny, name="Ny")
 run_parameters.add_task(Nz, name="Nz")
+run_parameters.add_task(Ta, name="Ta")
+run_parameters.add_task(float(sys.argv[4]), name="Phi")
 run_parameters.add_task("z", layout='g', name="z_grid")
 
 run_parameters.add_task(rpf.snapshot_freq, name="snap_freq")
@@ -243,6 +240,7 @@ try:
             logger.info('Parameter values imported form run_param_file.py:')
             logger.info('Ly = {}, Lz = {}; (Resolution of {},{})'.format(Ly, Lz, Ny, Nz))
             logger.info('Ra = {}, Pr = {}, Np = {}'.format(Ra, Pr, Np))
+            logger.info('Ta = {}, Phi = {}'.format(Ta, float(sys.argv[4])))
             logger.info('Snapshot files outputted every {}'.format(rpf.snapshot_freq))
             logger.info('Analysis files outputted every {}'.format(rpf.analysis_freq))
             if rpf.end_sim_time != np.inf:
@@ -269,3 +267,5 @@ finally:
     logger.info('Sim end time: %f' %solver.sim_time)
     logger.info('Run time: %.2f sec' %(end_time-start_time))
     logger.info('Run time: %f cpu-hr' %((end_time-start_time)/60/60*domain.dist.comm_cart.size))
+
+

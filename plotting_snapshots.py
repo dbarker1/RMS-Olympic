@@ -164,21 +164,41 @@ else:
 RS_y = R_stress_all[:,:,0]
 RS_z = R_stress_all[:,0,:]
 
-plt.plot(ana_t, RS_y)
-plt.ylabel("RS_y")
-plt.xlabel(r"Time / $\tau_\nu$")
-plt.xlim(0,ana_t[-1])
-plt.ylim(0, np.max(RS_y)*1.1)
-plt.savefig(save_direc + "RS_y")
-plt.close()
-plt.clf()
+RS_<t> = 
 
 plt.plot(ana_t, RS_z)
 plt.ylabel("RS_z")
 plt.xlabel(r"Time / $\tau_\nu$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(0, np.max(RS_z)*1.1)
-plt.savefig(save_direc + "RS_z")
+plt.savefig(save_direc + "RS_z_t")
+plt.close()
+plt.clf()
+
+plt.plot(ana_t, RS_y)
+plt.ylabel("RS_y")
+plt.xlabel(r"Time / $\tau_\nu$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(0, np.max(RS_y)*1.1)
+plt.savefig(save_direc + "RS_y_t")
+plt.close()
+plt.clf()
+
+plt.plot(y, RS_y)
+plt.ylabel("RS_y")
+plt.xlabel(r"y")
+plt.xlim(0,y[-1])
+plt.ylim(0, np.max(RS_y)*1.1)
+plt.savefig(save_direc + "RS_y_y")
+plt.close()
+plt.clf()
+
+plt.plot(z, RS_z)
+plt.ylabel("RS_z")
+plt.xlabel(r"z")
+plt.xlim(0,z[-1])
+plt.ylim(0, np.max(RS_z)*1.1)
+plt.savefig(save_direc + "RS_z_z")
 plt.close()
 plt.clf()
 

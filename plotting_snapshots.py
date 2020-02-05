@@ -101,8 +101,8 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     L_enth_all = np.array(file['tasks']['L_enth'])[:,0,:]
     E_def_all = np.array(file['tasks']['E_def'])[:,0,:]
     E_F_conv_all = np.array(file['tasks']['E_F_conv'])[:,0,:]
-    Re = np.array(file['tasks']['Re'])[:,0,:]						## NEW!!
-    R_stress = np.array(file['tasks']['R_stress'])[:,0,:]
+    Re = np.array(file['tasks']['Re'])[:,0,:]				## NEW!!
+    R_stress_all = np.array(file['tasks']['R_stress'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -159,6 +159,28 @@ if abs(min_w) >= abs(max_w):
     w_lim = abs(min_w)
 else:
     w_lim = abs(max_w)
+
+# Reynolds stresses
+RS_y = R_stress_all[:,:,0]
+RS_z = R_stress_all[:,0,:]
+
+plt.plot(ana_t, RS_y)
+plt.ylabel("RS_y")
+plt.xlabel(r"Time / $\tau_\nu$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(0, np.max(RS_y)*1.1)
+plt.savefig(save_direc + "RS_y")
+plt.close()
+plt.clf()
+
+plt.plot(ana_t, RS_z)
+plt.ylabel("RS_z")
+plt.xlabel(r"Time / $\tau_\nu$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(0, np.max(RS_z)*1.1)
+plt.savefig(save_direc + "RS_z")
+plt.close()
+plt.clf()
 
 plt.plot(ana_t,KE)
 plt.ylabel("KE")

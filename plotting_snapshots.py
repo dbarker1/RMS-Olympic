@@ -102,7 +102,7 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     E_def_all = np.array(file['tasks']['E_def'])[:,0,:]
     E_F_conv_all = np.array(file['tasks']['E_F_conv'])[:,0,:]
     Re = np.array(file['tasks']['Re'])[:,0,:]				## NEW!!
-    R_stress_all = np.array(file['tasks']['R_stress'])
+    R_stress_all = np.array(file['tasks']['RS_yz'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()

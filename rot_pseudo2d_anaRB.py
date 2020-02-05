@@ -31,7 +31,7 @@ import pathlib
 import logging
 logger = logging.getLogger(__name__)
 
-import run_param_file2 as rpf   #Imports a parameter file "run_param_file.py"
+import run_param_file as rpf   #Imports a parameter file "run_param_file.py"
 
 save_direc = "raw_data/"
 pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
@@ -41,16 +41,11 @@ pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
 Ly, Lz = rpf.Lx, rpf.Lz
 Ny, Nz = rpf.Nx, rpf.Nz
 Pr = rpf.Pr
-Ra = rpf.Ra
-Np = rpf.Np
-Ta = rpf.Ta
-Lat = rpf.phi
+Ra = float(sys.argv[2]) #rpf.Ra
+Np = float(sys.argv[1]) #rpf.Np
+Ta = float(sys.argv[3]) #rpf.Ta
+Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
 m = rpf.m
-#Ra = float(sys.argv[2]) #rpf.Ra
-#Np = float(sys.argv[1]) #rpf.Np
-#Ta = float(sys.argv[3]) #rpf.Ta
-#Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
-#m = rpf.m
 #theta = rpf.theta
 theta = 1 - np.exp(-Np/m)
 
@@ -189,7 +184,12 @@ analysis.add_task("integ(s,'y')/Ly", layout='g', name='<s>_y')
 analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layout='g', name='Re')
 
 ## Calculate Reynolds stress
-analysis.add_task("(u - (integ( integ(u , 'y')/Ly, 'z')/Lz)) * (w - (integ( integ(w , 'y')/Ly, 'z')/Lz))", layout='g', name='R_stress')
+#analysis.add_task("(u - integ(u, 'x')/Lx) * (v - integ(v, 'y')/Ly)", layout='g', name='RS_xy')
+#analysis.add_task("(u - integ(u, 'x')/Lx) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_xz')
+#analysis.add_task("(v - integ(v, 'y')/Ly) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_yx')
+analysis.add_task("(v - integ(v, 'y')/Ly) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_yz')
+#analysis.add_task("(w - integ(w, 'z')/Lz) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_zx')
+#analysis.add_task("(w - integ(w, 'z')/Lz) * (v - integ(v, 'y')/Ly)", layout='g', name='RS_zy')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')
@@ -207,7 +207,7 @@ analysis.add_task("(integ(rho_ref*w*T_ref*s, 'y')*Pr + \
                     integ(p*w, 'y')*((Pr*Pr*theta)/Ra))/Ly", layout='g', name='L_enth')
 
 # Magnitude of viscous dissipation as calculated by equation 5 (E_def) and equation 24 (E_F_conv) - See C&B '17
-analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)*wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
+analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
                                 , 'y'), 'z')*(((Pr*Pr*theta)/Ra )/(Ly*Lz)) ", layout='g', name='E_def')
 analysis.add_task(" integ( (integ(rho_ref*T_ref*s*w,'y')/Ly)/T_ref, 'z')*Pr*theta/Lz ", layout='g', name='E_F_conv')
 

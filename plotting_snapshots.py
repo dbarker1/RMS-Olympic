@@ -164,8 +164,6 @@ else:
 RS_y = R_stress_all[:,:,0]
 RS_z = R_stress_all[:,0,:]
 
-RS_<t> = 
-
 plt.plot(ana_t, RS_z)
 plt.ylabel("RS_z")
 plt.xlabel(r"Time / $\tau_\nu$")

@@ -31,7 +31,7 @@ import pathlib
 import logging
 logger = logging.getLogger(__name__)
 
-import run_param_file as rpf   #Imports a parameter file "run_param_file.py"
+import run_param_file2 as rpf   #Imports a parameter file "run_param_file.py"
 
 save_direc = "raw_data/"
 pathlib.Path(save_direc).mkdir(parents=True, exist_ok=True)
@@ -188,7 +188,8 @@ analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layo
 #analysis.add_task("(u - integ(u, 'x')/Lx) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_xz')
 #analysis.add_task("(v - integ(v, 'y')/Ly) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_yx')
 analysis.add_task("(v - integ(v, 'y')/Ly) * (w - integ(w, 'z')/Lz)", layout='g', name='RS_yz')
-
+#analysis.add_task("(w - integ(w, 'z')/Lz) * (u - integ(u, 'x')/Lx)", layout='g', name='RS_zx')
+#analysis.add_task("(w - integ(w, 'z')/Lz) * (v - integ(v, 'y')/Ly)", layout='g', name='RS_zy')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')

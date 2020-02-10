@@ -161,6 +161,12 @@ else:
 
 # ======== Plotting Reynolds Stresses ========
 
+# MEETING NOTES:
+# Normally see variations in entropy profile w. Dedalus is a spectral code so accurate for solving D.E.: no numerical dissipation.
+# Generally need Re = 1 at grid scale (1/resolution)
+# Viscous time is the dynamical time (L/u) * Reynolds number (uL/nu) = L^2/(nu * c^2)
+# Plot on contour with one axis being time
+
 RS_z = R_stress_all[:,0,:]
 RS_y = R_stress_all[:,:,0]
 
@@ -177,7 +183,7 @@ print("diagnostic: shape of arrays")
 for arr in arrays:
 	print(arr.shape)
 
-## Needs contour over space coordinates 
+## Needs contour over space coordinates
 
 #	c1 = plt.contourf(yy, zz, RS_2D_t)
 #	c1.cmap.set_over('red')

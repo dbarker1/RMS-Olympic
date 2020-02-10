@@ -21,7 +21,7 @@ from shutil import copy2
 
 direc = "raw_data/"
 #save_direc = "figs_rot_only/Np=%.2f/Ra=%.2E/Ta=%.2E/Phi=%i/" % (Np, Decimal(Ra), Decimal(Ta), Decimal(Phi))
-run_name = "Anelastic_rot1"
+run_name = "test1"
 
 plot_fluxes = True
 plot_final_state = False #True

@@ -173,8 +173,11 @@ RS_2D_t = np.vstack((RS_z_t, RS_y_t))
 
 arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y, RS_2D_t]
 
+print("diagnostic: shape of arrays")
 for arr in arrays:
 	print(arr.shape)
+
+## Needs contour over space coordinates 
 
 #	c1 = plt.contourf(yy, zz, RS_2D_t)
 #	c1.cmap.set_over('red')

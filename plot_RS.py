@@ -212,15 +212,15 @@ plt.savefig(save_direc + "RS_y_t")
 plt.close()
 plt.clf()
 
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-xxx = RS_z_t
-yyy = RS_y_t
-zzz = ana_t
-ax.plot(xxx, yyy, zzz, label="RS av. over position")
-plt.savefig(save_direc + "RS_t_3D")
-plt.close()
-plt.clf()
+#fig = plt.figure()
+#ax = fig.gca(projection='3d')
+#xxx = RS_z_t
+#yyy = RS_y_t
+#zzz = ana_t
+#ax.plot(xxx, yyy, zzz, label="RS av. over position")
+#plt.savefig(save_direc + "RS_t_3D")
+#plt.close()
+#plt.clf()
 
 plt.plot(z, RS_z_z)
 plt.ylabel("RS_z")

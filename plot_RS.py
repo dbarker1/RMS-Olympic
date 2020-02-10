@@ -302,9 +302,9 @@ with open(save_direc + 'results.txt', 'w') as f:
     f.write('Phi\n')
     f.write(str(Phi) + '\n')
     f.write('E_def\n')
-    f.write(str(E_def_all[ASI:AEI, 0].mean()) + '\n')
+#    f.write(str(E_def_all[ASI:AEI, 0].mean()) + '\n')
     f.write('E_F_conv\n')
-    f.write(str(E_F_conv_all[ASI:AEI, 0].mean()) + '\n')
+#    f.write(str(E_F_conv_all[ASI:AEI, 0].mean()) + '\n')
     f.close()
 
 

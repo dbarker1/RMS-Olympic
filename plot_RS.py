@@ -265,17 +265,17 @@ plt.savefig(save_direc + "Entropy_Profile")
 plt.close()
 plt.clf()
 
-plt.plot(ana_t,E_def_all)
-plt.plot(ana_t, E_def_all[ASI:AEI, 0].mean() * np.ones(len(ana_t)), '--', color = 'r')
-plt.legend([r"$E_{def}$", r"$E_{mean}$" + " = {:.3f}".format(E_def_all[ASI:AEI, 0].mean())])
-plt.ylabel(r"$E_{def} = \Phi / L_u$")
-plt.xlabel(r"Time / $\tau_\nu$")
+#plt.plot(ana_t,E_def_all)
+#plt.plot(ana_t, E_def_all[ASI:AEI, 0].mean() * np.ones(len(ana_t)), '--', color = 'r')
+#plt.legend([r"$E_{def}$", r"$E_{mean}$" + " = {:.3f}".format(E_def_all[ASI:AEI, 0].mean())])
+#plt.ylabel(r"$E_{def} = \Phi / L_u$")
+#plt.xlabel(r"Time / $\tau_\nu$")
 #plt.xlim(0,ana_t[-1])
 #plt.ylim(0, np.max(KE)*1.1)
-plt.title(title_name)
-plt.savefig(save_direc + "E_def")
-plt.close()
-plt.clf()
+#plt.title(title_name)
+#plt.savefig(save_direc + "E_def")
+#plt.close()
+#plt.clf()
 
 plt.plot(ana_t,E_F_conv_all)
 plt.ylabel(r"$E_conv = \Phi / L_u$")
@@ -556,7 +556,6 @@ if plot_snapshots:
 		ax2.set_xlabel("y")
 
 		plt.savefig(save_direc + "snapshots/fig_{:03d}".format(i))
-
 
 		# plt.figure(figsize=(12,12))
 		#

@@ -159,12 +159,17 @@ else:
 	w_lim = abs(max_w)
 
 # Reynolds stresses
-RS_y = R_stress_all[:,:,0]
 RS_z = R_stress_all[:,0,:]
+RS_y = R_stress_all[:,:,0]
+
 RS_z_t = np.mean(np.array(RS_z), axis=1)
 RS_y_t = np.mean(np.array(RS_y), axis=1)
-RS_y_y = np.mean(np.array(RS_y), axis=0)
 RS_z_z = np.mean(np.array(RS_z), axis=0)
+RS_y_y = np.mean(np.array(RS_y), axis=0)
+
+arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y]
+for arr in arrays:
+	print(arr.shape)
 
 plt.plot(ana_t, RS_z_t)
 plt.ylabel("RS_z")
@@ -184,21 +189,21 @@ plt.savefig(save_direc + "RS_y_t")
 plt.close()
 plt.clf()
 
-plt.plot(y, RS_y_y)
-plt.ylabel("RS_y")
-plt.xlabel(r"y")
-plt.xlim(0,y[-1])
-plt.ylim(0, np.max(RS_y_y)*1.1)
-plt.savefig(save_direc + "RS_y_y")
-plt.close()
-plt.clf()
-
 plt.plot(z, RS_z_z)
 plt.ylabel("RS_z")
 plt.xlabel(r"z")
 plt.xlim(0,z[-1])
 plt.ylim(0, np.max(RS_z_z)*1.1)
 plt.savefig(save_direc + "RS_z_z")
+plt.close()
+plt.clf()
+
+plt.plot(y, RS_y_y)
+plt.ylabel("RS_y")
+plt.xlabel(r"y")
+plt.xlim(0,y[-1])
+plt.ylim(0, np.max(RS_y_y)*1.1)
+plt.savefig(save_direc + "RS_y_y")
 plt.close()
 plt.clf()
 

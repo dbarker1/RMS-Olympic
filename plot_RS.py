@@ -60,7 +60,7 @@ with h5py.File(direc + "run_parameters/run_parameters_" + run_name + ".h5", mode
     print("Ta = {}".format(Ta))
     print("Np = {}".format(Np))
     print("Phi = {}".format(Phi))
-    print("(Nx,Nz) = ({},{})".format(Nx,Nz))
+    print("(Ny,Nz) = ({},{})".format(Ny,Nz))
     print("Pr = {}".format(Pr))
 
 #direc = "raw_data/Np=%.2f/Ra=%.2E/Ta=%.2E/Phi=%i/" %(Np, Decimal(Ra), Decimal(Ta), Phi)

@@ -168,13 +168,13 @@ RS_y_t = np.mean(np.array(RS_y), axis=1)
 RS_z_z = np.mean(np.array(RS_z), axis=0)
 RS_y_y = np.mean(np.array(RS_y), axis=0)
 
-arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y]
+RS_2D_t = np.concatenate((RS_z_t, RS_y_t), axis=0)
+
+arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y, RS_2D_t]
 for arr in arrays:
 	print(arr.shape)
 
-RS_2D_t = np.concatenate((RS_z_t, RS_y_t), axis=0)
-
-c1 = plt.contour(yy, zz, RS_2D_t)
+c1 = plt.contourf(yy, zz, RS_2D_t)
 c1.cmap.set_over('red')
 c1.cmap.set_under('blue')
 c1.changed()

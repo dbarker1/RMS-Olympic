@@ -1,6 +1,7 @@
 from dedalus import public as de
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from mpl_toolkits.mplot3d import Axes3D
 import h5py
 import numpy as np
 import sys
@@ -188,6 +189,17 @@ plt.ylim(-np.max(RS_y_t)*1.1, np.max(RS_y_t)*1.1)
 plt.savefig(save_direc + "RS_y_t")
 plt.close()
 plt.clf()
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+x = RS_z_t
+y = RS_y_t
+z = ana_t
+ax.plot(x, y, z, label="RS av. over position")
+plt.savefig(save_direc + "RS_t_3D")
+plt.close()
+plt.clf()
+
 
 plt.plot(z, RS_z_z)
 plt.ylabel("RS_z")

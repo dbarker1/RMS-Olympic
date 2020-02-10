@@ -212,10 +212,10 @@ plt.clf()
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-x = RS_z_t
-y = RS_y_t
-z = ana_t
-ax.plot(x, y, z, label="RS av. over position")
+xxx = RS_z_t
+yyy = RS_y_t
+zzz = ana_t
+ax.plot(xxx, yyy, zzz, label="RS av. over position")
 plt.savefig(save_direc + "RS_t_3D")
 plt.close()
 plt.clf()

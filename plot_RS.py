@@ -159,7 +159,8 @@ if abs(min_w) >= abs(max_w):
 else:
 	w_lim = abs(max_w)
 
-# Reynolds stresses
+# ======== Plotting Reynolds Stresses ========
+
 RS_z = R_stress_all[:,0,:]
 RS_y = R_stress_all[:,:,0]
 
@@ -171,13 +172,14 @@ RS_y_y = np.mean(np.array(RS_y), axis=0)
 RS_2D_t = np.vstack((RS_z_t, RS_y_t))
 
 arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y, RS_2D_t]
+
 for arr in arrays:
 	print(arr.shape)
 
-c1 = plt.contourf(yy, zz, RS_2D_t)
-c1.cmap.set_over('red')
-c1.cmap.set_under('blue')
-c1.changed()
+#	c1 = plt.contourf(yy, zz, RS_2D_t)
+#	c1.cmap.set_over('red')
+#	c1.cmap.set_under('blue')
+#	c1.changed()
 
 plt.plot(ana_t, RS_z_t)
 plt.ylabel("RS_z")
@@ -207,7 +209,6 @@ plt.savefig(save_direc + "RS_t_3D")
 plt.close()
 plt.clf()
 
-
 plt.plot(z, RS_z_z)
 plt.ylabel("RS_z")
 plt.xlabel(r"z")
@@ -225,6 +226,8 @@ plt.ylim(-1 * np.max(RS_y_y) * 1.1, np.max(RS_y_y) * 1.1)
 plt.savefig(save_direc + "RS_y_y")
 plt.close()
 plt.clf()
+
+# ======== End of Reynolds Stresses ========
 
 plt.plot(ana_t,KE)
 plt.ylabel("KE")

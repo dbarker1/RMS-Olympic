@@ -41,12 +41,12 @@ avg_t_stop  = 4.0
 with h5py.File(direc + "run_parameters/run_parameters_" + run_name + ".h5", mode='r') as file:
     Pr = file['tasks']['Pr'][0][0][0]
     Ra = file['tasks']['Ra'][0][0][0]
-    Ly = int(file['tasks']['Ly'][0][0][0]) #!!!CHANGE REMAINING X to Y!!!!!
+    Lx = int(file['tasks']['Ly'][0][0][0]) #!!!CHANGE REMAINING X to Y!!!!!
     Lz = int(file['tasks']['Lz'][0][0][0])
-    Ny = int(file['tasks']['Ny'][0][0][0]) #!!!CHANGE REMAINING X to Y!!!!!
+    Nx = int(file['tasks']['Ny'][0][0][0]) #!!!CHANGE REMAINING X to Y!!!!!
     Nz = int(file['tasks']['Nz'][0][0][0])
     Np = float(file['tasks']['Np'][0][0][0])
-    y = np.linspace(0,Ly,Ny)
+    x = np.linspace(0,Lx,Nx)
     Ta = file['tasks']['Ta'][0][0][0]
     Phi = int(file['tasks']['Phi'][0][0][0])
     # z = np.linspace(0,Lz,Nz)
@@ -54,13 +54,13 @@ with h5py.File(direc + "run_parameters/run_parameters_" + run_name + ".h5", mode
     z_basis = de.Chebyshev('z', 64, interval=(0,1), dealias=3/2)
     z = np.array(z_basis.grid(1))
 
-    xx, zz = np.meshgrid(y,z)
+    xx, zz = np.meshgrid(x,z)
 
     print("Ra = {}".format(Ra))
     print("Ta = {}".format(Ta))
     print("Np = {}".format(Np))
     print("Phi = {}".format(Phi))
-    print("(Ny,Nz) = ({},{})".format(Ny,Nz))
+    print("(Nx,Nz) = ({},{})".format(Nx,Nz))
     print("Pr = {}".format(Pr))
 
 #direc = "raw_data/Np=%.2f/Ra=%.2E/Ta=%.2E/Phi=%i/" %(Np, Decimal(Ra), Decimal(Ta), Phi)
@@ -102,8 +102,6 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     L_enth_all = np.array(file['tasks']['L_enth'])[:,0,:]
     E_def_all = np.array(file['tasks']['E_def'])[:,0,:]
     E_F_conv_all = np.array(file['tasks']['E_F_conv'])[:,0,:]
-    Re = np.array(file['tasks']['Re'])[:,0,:]                   ## NEW!!
-    R_stress_all = np.array(file['tasks']['RS_yz'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -161,93 +159,6 @@ if abs(min_w) >= abs(max_w):
 else:
     w_lim = abs(max_w)
     
-# ======== Plotting Reynolds Stresses ========
-
-# MEETING NOTES:
-# Normally see variations in entropy profile w. Dedalus is a spectral code so accurate for solving D.E.: no numerical dissipation.
-# Generally need Re = 1 at grid scale (1/resolution)
-# Viscous time is the dynamical time (L/u) * Reynolds number (uL/nu) = L^2/(nu * c^2)
-# Plot on contour with one axis being time
-
-RS_z = R_stress_all[:,0,:]
-RS_y = R_stress_all[:,:,0]
-
-min_RS = np.min(R_stress_all)
-max_RS = np.max(R_stress_all)
-
-if abs(min_RS) >= abs(max_RS):
-	RS_lim = abs(min_RS)
-else:
-	RS_lim = abs(max_RS)
-
-RS_z_t = np.mean(np.array(RS_z), axis=1)
-RS_y_t = np.mean(np.array(RS_y), axis=1)
-RS_z_z = np.mean(np.array(RS_z), axis=0)
-RS_y_y = np.mean(np.array(RS_y), axis=0)
-
-RS_2D_t = np.vstack((RS_z_t, RS_y_t))
-
-arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y, RS_2D_t]
-
-print("diagnostic: shape of arrays")
-for arr in arrays:
-	print(arr.shape)
-
-## Needs contour over space coordinates
-
-#	c1 = plt.contourf(yy, zz, RS_2D_t)
-#	c1.cmap.set_over('red')
-#	c1.cmap.set_under('blue')
-#	c1.changed()
-
-plt.plot(ana_t, RS_z_t)
-plt.ylabel("RS_z")
-plt.xlabel(r"Time / $\tau_\nu$")
-plt.xlim(0,ana_t[-1])
-plt.ylim(-1 * np.max(RS_z_t) * 1.1, np.max(RS_z_t) * 1.1)
-plt.savefig(save_direc + "RS_z_t")
-plt.close()
-plt.clf()
-
-plt.plot(ana_t, RS_y_t)
-plt.ylabel("RS_y")
-plt.xlabel(r"Time / $\tau_\nu$")
-plt.xlim(0,ana_t[-1])
-plt.ylim(-1 * np.max(RS_y_t) * 1.1, np.max(RS_y_t) * 1.1)
-plt.savefig(save_direc + "RS_y_t")
-plt.close()
-plt.clf()
-
-#fig = plt.figure()
-#ax = fig.gca(projection='3d')
-#xxx = RS_z_t
-#yyy = RS_y_t
-#zzz = ana_t
-#ax.plot(xxx, yyy, zzz, label="RS av. over position")
-#plt.savefig(save_direc + "RS_t_3D")
-#plt.close()
-#plt.clf()
-
-plt.plot(z, RS_z_z)
-plt.ylabel("RS_z")
-plt.xlabel(r"z")
-plt.xlim(0,z[-1])
-plt.ylim(-1 * np.max(RS_z_z) * 1.1, np.max(RS_z_z) * 1.1)
-plt.savefig(save_direc + "RS_z_z")
-plt.close()
-plt.clf()
-
-plt.plot(y, RS_y_y)
-plt.ylabel("RS_y")
-plt.xlabel(r"y")
-plt.xlim(0,y[-1])
-plt.ylim(-1 * np.max(RS_y_y) * 1.1, np.max(RS_y_y) * 1.1)
-plt.savefig(save_direc + "RS_y_y")
-plt.close()
-plt.clf()
-
-# ======== End of Reynolds Stresses ========
-    
 title_name = "Np = {:.2e}, Ra = {:.2e}, Ta = {:.2e}, \nPhi = {:d}, Time average = {:.2f} ".format(Np,Ra,Ta,Phi,avg_t_range) + r"$\tau_\nu$"
 
 plt.plot(ana_t,KE)
@@ -271,17 +182,17 @@ plt.savefig(save_direc + "Entropy_Profile")
 plt.close()
 plt.clf()
 
-#plt.plot(ana_t,E_def_all)
-#plt.plot(ana_t, E_def_all[ASI:AEI, 0].mean() * np.ones(len(ana_t)), '--', color = 'r')
-#plt.legend([r"$E_{def}$", r"$E_{mean}$" + " = {:.3f}".format(E_def_all[ASI:AEI, 0].mean())])
-#plt.ylabel(r"$E_{def} = \Phi / L_u$")
-#plt.xlabel(r"Time / $\tau_\nu$")
+plt.plot(ana_t,E_def_all)
+plt.plot(ana_t, E_def_all[ASI:AEI, 0].mean() * np.ones(len(ana_t)), '--', color = 'r')
+plt.legend([r"$E_{def}$", r"$E_{mean}$" + " = {:.3f}".format(E_def_all[ASI:AEI, 0].mean())])
+plt.ylabel(r"$E_{def} = \Phi / L_u$")
+plt.xlabel(r"Time / $\tau_\nu$")
 #plt.xlim(0,ana_t[-1])
 #plt.ylim(0, np.max(KE)*1.1)
-#plt.title(title_name)
-#plt.savefig(save_direc + "E_def")
-#plt.close()
-#plt.clf()
+plt.title(title_name)
+plt.savefig(save_direc + "E_def")
+plt.close()
+plt.clf()
 
 plt.plot(ana_t,E_F_conv_all)
 plt.ylabel(r"$E_conv = \Phi / L_u$")
@@ -308,9 +219,9 @@ with open(save_direc + 'results.txt', 'w') as f:
     f.write('Phi\n')
     f.write(str(Phi) + '\n')
     f.write('E_def\n')
-#    f.write(str(E_def_all[ASI:AEI, 0].mean()) + '\n')
+    f.write(str(E_def_all[ASI:AEI, 0].mean()) + '\n')
     f.write('E_F_conv\n')
-#    f.write(str(E_F_conv_all[ASI:AEI, 0].mean()) + '\n')
+    f.write(str(E_F_conv_all[ASI:AEI, 0].mean()) + '\n')
     f.close()
 
 
@@ -508,98 +419,90 @@ if plot_final_state:
 
 if plot_snapshots:
 
-	if os.path.exists(save_direc + "snapshots/") == False:
-		pathlib.Path(save_direc + "snapshots/").mkdir(parents=True)
+    if os.path.exists(save_direc + "snapshots/") == False:
+        pathlib.Path(save_direc + "snapshots/").mkdir(parents=True)
 
-	for i in range(0,len(u_all[:,0,0]),30):
+    for i in range(0,len(u_all[:,0,0]),30):
 
-		u = u_all[i,:,:]
-		w = w_all[i,:,:]
-		#T = T_all[i,:,:]
-		s = s_all[i,:,:]
-		RS = R_stress_all[i,:,:]
+        u = u_all[i,:,:]
+        w = w_all[i,:,:]
+        #T = T_all[i,:,:]
+        s = s_all[i,:,:]
 
-		ana_index = (np.abs(ana_t - snap_t[i])).argmin()
+        ana_index = (np.abs(ana_t - snap_t[i])).argmin()
 
-		fig = plt.figure(figsize=(18,6))
-		gs = fig.add_gridspec(2,3, hspace=0.3, wspace=0.1)
-		ax1 = fig.add_subplot(gs[0,0])
-		ax2 = fig.add_subplot(gs[0,1])
-		ax3 = fig.add_subplot(gs[1,0])
-		ax4 = fig.add_subplot(gs[1,1])
-		ax5 = fig.add_subplot(gs[0,2])
-		ax6 = fig.add_subplot(gs[1,2])
+        fig = plt.figure(figsize=(18,6))
+        gs = fig.add_gridspec(2,2, hspace=0.3, wspace=0.1)
+        ax1 = fig.add_subplot(gs[0,0])
+        ax2 = fig.add_subplot(gs[0,1])
+        ax3 = fig.add_subplot(gs[1,0])
+        ax4 = fig.add_subplot(gs[1,1])
 
-		c1 = ax1.contourf(xx, zz, np.transpose(u), levels=np.linspace(-u_lim, u_lim, 51), cmap='RdBu_r')
-		c1_bar = fig.colorbar(c1, ax=ax1)
-		c1_bar.set_label("u", rotation=0)
-		ax1.set_ylabel("z")
-		ax1.set_xlabel("y")
+        c1 = ax1.contourf(xx, zz, np.transpose(u), levels=np.linspace(-u_lim, u_lim, 51), cmap='RdBu_r')
+        c1_bar = fig.colorbar(c1, ax=ax1)
+        c1_bar.set_label("u", rotation=0)
+        ax1.set_ylabel("z")
+        ax1.set_xlabel("y")
 
-		c2 = ax2.contourf(xx, zz, np.transpose(w), levels=np.linspace(-w_lim, w_lim, 51), cmap='RdBu_r')
-		c2_bar = fig.colorbar(c2, ax=ax2)
-		c2_bar.set_label("w", rotation=0)
-		ax2.set_ylabel("z")
-		ax2.set_xlabel("y")
+        c2 = ax2.contourf(xx, zz, np.transpose(w), levels=np.linspace(-w_lim, w_lim, 51), cmap='RdBu_r')
+        c2_bar = fig.colorbar(c2, ax=ax2)
+        c2_bar.set_label("w", rotation=0)
+        ax2.set_ylabel("z")
+        ax2.set_xlabel("y")
 
-		#c3 = ax3.contourf(yy, zz, np.transpose(T), levels=np.linspace(0, max_T, 51), cmap='OrRd')
-		c3 = ax3.contourf(xx, zz, np.transpose(s), levels=np.linspace(0, max_s, 51), cmap='OrRd')
-		c3_bar = fig.colorbar(c3, ax=ax3)
-		c3_bar.set_label("s", rotation=0)
-		ax3.set_ylabel("z")
-		ax3.set_xlabel("y")
+        #c3 = ax3.contourf(xx, zz, np.transpose(T), levels=np.linspace(0, max_T, 51), cmap='OrRd')
+        c3 = ax3.contourf(xx, zz, np.transpose(s), levels=np.linspace(0, max_s, 51), cmap='OrRd')
+        c3_bar = fig.colorbar(c3, ax=ax3)
+        c3_bar.set_label("s", rotation=0)
+        ax3.set_ylabel("z")
+        ax3.set_xlabel("y")
 
-		ax4.plot(ana_t[0:ana_index], KE[0:ana_index])
-		ax4.set_ylim(0, np.max(KE)*1.1)
-		ax4.set_xlim(0, ana_t[-1])
-		ax4.set_ylabel("KE")
-		ax4.set_xlabel(r"Time / $\tau_\nu$")
-		
-		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
-		c5_bar = fig.colorbar(c5, ax=ax5)
-		c5_bar.set_label("Reynolds stress", rotation=0)
-		ax2.set_ylabel("z")
-		ax2.set_xlabel("y")
+        ax4.plot(ana_t[0:ana_index], KE[0:ana_index])
+        ax4.set_ylim(0, np.max(KE)*1.1)
+        ax4.set_xlim(0, ana_t[-1])
+        ax4.set_ylabel("KE")
+        ax4.set_xlabel(r"Time / $\tau_\nu$")
 
-		plt.savefig(save_direc + "snapshots/fig_{:03d}".format(i))
+        plt.savefig(save_direc + "snapshots/fig_{:03d}".format(i))
 
-		# plt.figure(figsize=(12,12))
-		#
-		# u_fig = plt.subplot(4,1,1)
-		# contour_map = plt.contourf(yy,zz,np.transpose(u), levels = np.linspace(-u_lim,u_lim,51), cmap='RdBu_r')
-		# cbar = plt.colorbar(contour_map)
-		# cbar.set_label("u", rotation=0)
-		# plt.ylabel("z")
-		# # plt.xlabel("x")
-		#
-		# w_fig = plt.subplot(4,1,2)
-		# contour_map = plt.contourf(yy,zz,np.transpose(w), levels = np.linspace(-w_lim,w_lim,51), cmap='RdBu_r')
-		# cbar = plt.colorbar(contour_map)
-		# cbar.set_label("w", rotation=0)
-		# plt.ylabel("z")
-		# # plt.xlabel("x")
-		#
-		# s_fig = plt.subplot(4,1,3)
-		# contour_map = plt.contourf(yy,zz,np.transpose(T), levels=np.linspace(0,max_T,51), cmap='OrRd')
-		# cbar = plt.colorbar(contour_map)
-		# cbar.set_label("T", rotation=0, labelpad=10)
-		# plt.ylabel("z")
-		# plt.xlabel("x")
-		#
-		# KE_fig = plt.subplot(4,1,4)
-		# plt.xlabel(r"Time" + " " + r"$[\tau_\nu]$ ")
-		# plt.ylabel("KE")
-		# plt.xlim(0,ana_t[-1])
-		# plt.ylim(0,1.1*np.max(KE))
-		# plt.plot(ana_t, KE,  'C0', label='Integral average - Dedalus')
-		# legend = plt.legend(loc='lower right')
-		# ax = plt.gca().add_artist(legend)
-		# plt.tight_layout()
 
-		print("Saving snapshot image {}/{} - fig_{:03d}".format(i+1, len(u_all[:,0,0]), i))
+        # plt.figure(figsize=(12,12))
+        #
+        # u_fig = plt.subplot(4,1,1)
+        # contour_map = plt.contourf(xx,zz,np.transpose(u), levels = np.linspace(-u_lim,u_lim,51), cmap='RdBu_r')
+        # cbar = plt.colorbar(contour_map)
+        # cbar.set_label("u", rotation=0)
+        # plt.ylabel("z")
+        # # plt.xlabel("x")
+        #
+        # w_fig = plt.subplot(4,1,2)
+        # contour_map = plt.contourf(xx,zz,np.transpose(w), levels = np.linspace(-w_lim,w_lim,51), cmap='RdBu_r')
+        # cbar = plt.colorbar(contour_map)
+        # cbar.set_label("w", rotation=0)
+        # plt.ylabel("z")
+        # # plt.xlabel("x")
+        #
+        # s_fig = plt.subplot(4,1,3)
+        # contour_map = plt.contourf(xx,zz,np.transpose(T), levels=np.linspace(0,max_T,51), cmap='OrRd')
+        # cbar = plt.colorbar(contour_map)
+        # cbar.set_label("T", rotation=0, labelpad=10)
+        # plt.ylabel("z")
+        # plt.xlabel("x")
+        #
+        # KE_fig = plt.subplot(4,1,4)
+        # plt.xlabel(r"Time" + " " + r"$[\tau_\nu]$ ")
+        # plt.ylabel("KE")
+        # plt.xlim(0,ana_t[-1])
+        # plt.ylim(0,1.1*np.max(KE))
+        # plt.plot(ana_t, KE,  'C0', label='Integral average - Dedalus')
+        # legend = plt.legend(loc='lower right')
+        # ax = plt.gca().add_artist(legend)
+        # plt.tight_layout()
 
-		plt.close()
-		plt.clf()
+        print("Saving snapshot image {}/{} - fig_{:03d}".format(i+1, len(u_all[:,0,0]), i))
+
+        plt.close()
+        plt.clf()
 
 
 

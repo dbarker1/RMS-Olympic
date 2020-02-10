@@ -524,20 +524,20 @@ if plot_snapshots:
 		ax5 = fig.add_subplot(gs[0,2])
 		ax6 = fig.add_subplot(gs[1,2])
 
-		c1 = ax1.contourf(yy, zz, np.transpose(u), levels=np.linspace(-u_lim, u_lim, 51), cmap='RdBu_r')
+		c1 = ax1.contourf(xx, zz, np.transpose(u), levels=np.linspace(-u_lim, u_lim, 51), cmap='RdBu_r')
 		c1_bar = fig.colorbar(c1, ax=ax1)
 		c1_bar.set_label("u", rotation=0)
 		ax1.set_ylabel("z")
 		ax1.set_xlabel("y")
 
-		c2 = ax2.contourf(yy, zz, np.transpose(w), levels=np.linspace(-w_lim, w_lim, 51), cmap='RdBu_r')
+		c2 = ax2.contourf(xx, zz, np.transpose(w), levels=np.linspace(-w_lim, w_lim, 51), cmap='RdBu_r')
 		c2_bar = fig.colorbar(c2, ax=ax2)
 		c2_bar.set_label("w", rotation=0)
 		ax2.set_ylabel("z")
 		ax2.set_xlabel("y")
 
 		#c3 = ax3.contourf(yy, zz, np.transpose(T), levels=np.linspace(0, max_T, 51), cmap='OrRd')
-		c3 = ax3.contourf(yy, zz, np.transpose(s), levels=np.linspace(0, max_s, 51), cmap='OrRd')
+		c3 = ax3.contourf(xx, zz, np.transpose(s), levels=np.linspace(0, max_s, 51), cmap='OrRd')
 		c3_bar = fig.colorbar(c3, ax=ax3)
 		c3_bar.set_label("s", rotation=0)
 		ax3.set_ylabel("z")
@@ -549,7 +549,7 @@ if plot_snapshots:
 		ax4.set_ylabel("KE")
 		ax4.set_xlabel(r"Time / $\tau_\nu$")
 		
-		c5 = ax5.contourf(yy, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
+		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
 		c5_bar = fig.colorbar(c5, ax=ax5)
 		c5_bar.set_label("Reynolds stress", rotation=0)
 		ax2.set_ylabel("z")

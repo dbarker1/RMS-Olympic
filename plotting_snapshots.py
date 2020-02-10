@@ -162,7 +162,7 @@ else:
 RS_y = R_stress_all[:,:,0]
 RS_z = R_stress_all[:,0,:]
 
-plt.plot(ana_t, np.mean(np.array(RS_z), axis=0))
+plt.plot(ana_t, np.mean(np.array(RS_z), axis=1))
 plt.ylabel("RS_z")
 plt.xlabel(r"Time / $\tau_\nu$")
 plt.xlim(0,ana_t[-1])
@@ -171,7 +171,7 @@ plt.savefig(save_direc + "RS_z_t")
 plt.close()
 plt.clf()
 
-plt.plot(ana_t, np.mean(np.array(RS_y), axis=0))
+plt.plot(ana_t, np.mean(np.array(RS_y), axis=1))
 plt.ylabel("RS_y")
 plt.xlabel(r"Time / $\tau_\nu$")
 plt.xlim(0,ana_t[-1])

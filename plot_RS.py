@@ -555,7 +555,7 @@ if plot_snapshots:
 		ax4.set_ylabel("KE")
 		ax4.set_xlabel(r"Time / $\tau_\nu$")
 
-		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-4000, 4000, 51), cmap='RdBu_r')
+		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
 		c5_bar = fig.colorbar(c5, ax=ax5)
 		c5_bar.set_label("Reynolds stress", rotation=0)
 		ax2.set_ylabel("z")

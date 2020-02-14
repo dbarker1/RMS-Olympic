@@ -113,9 +113,9 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     #print(E_def_all)
 
     KE = np.array(file['tasks']['KE'])[:,0,0]
-    
+
     s_mean = np.array(file['tasks']['<s>_y'])[-1,0,:] #!!!CHANGE REMAINING X to Y!!!!!
-    
+
     ana_t = np.array(file['scales']['sim_time'])
     #print('time shape:', ana_t.shape)
     #print('x shape:', x.shape)
@@ -160,7 +160,7 @@ if abs(min_w) >= abs(max_w):
     w_lim = abs(min_w)
 else:
     w_lim = abs(max_w)
-    
+
 # ======== Plotting Reynolds Stresses ========
 
 # MEETING NOTES:
@@ -247,7 +247,7 @@ plt.close()
 plt.clf()
 
 # ======== End of Reynolds Stresses ========
-    
+
 title_name = "Np = {:.2e}, Ra = {:.2e}, Ta = {:.2e}, \nPhi = {:d}, Time average = {:.2f} ".format(Np,Ra,Ta,Phi,avg_t_range) + r"$\tau_\nu$"
 
 plt.plot(ana_t,KE)
@@ -395,7 +395,7 @@ if plot_fluxes:
 
     mean_L_other = mean_L_p + mean_L_KE + mean_L_visc
     mean_L_tot = mean_L_other + mean_L_diss + mean_L_KE + mean_L_visc + mean_L_p + mean_L_buoy
-    
+
     plt.plot(mean_L_other,z, 'k', linestyle='-', label="$L_{other}$")
     plt.plot(mean_L_diss,z, 'magenta', linestyle='-', label="$L_{diss}$")
     plt.plot(mean_L_p,z, 'b', linestyle='-',  label="$L_{p}$")
@@ -410,7 +410,7 @@ if plot_fluxes:
     plt.clf()
     plt.close()
 
-    
+
 
 if plot_final_state:
 
@@ -554,8 +554,8 @@ if plot_snapshots:
 		ax4.set_xlim(0, ana_t[-1])
 		ax4.set_ylabel("KE")
 		ax4.set_xlabel(r"Time / $\tau_\nu$")
-		
-		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
+
+		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-4000, 4000, 51), cmap='RdBu_r')
 		c5_bar = fig.colorbar(c5, ax=ax5)
 		c5_bar.set_label("Reynolds stress", rotation=0)
 		ax2.set_ylabel("z")
@@ -600,6 +600,3 @@ if plot_snapshots:
 
 		plt.close()
 		plt.clf()
-
-
-

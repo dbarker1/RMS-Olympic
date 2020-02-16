@@ -554,18 +554,15 @@ if plot_snapshots:
 		w = w_all[i,:,:]
 		#T = T_all[i,:,:]
 		s = s_all[i,:,:]
-		RS = R_stress_all[i,:,:]
 
 		ana_index = (np.abs(ana_t - snap_t[i])).argmin()
 
 		fig = plt.figure(figsize=(18,6))
-		gs = fig.add_gridspec(2,3, hspace=0.3, wspace=0.1)
+		gs = fig.add_gridspec(2,2, hspace=0.3, wspace=0.1)
 		ax1 = fig.add_subplot(gs[0,0])
 		ax2 = fig.add_subplot(gs[0,1])
 		ax3 = fig.add_subplot(gs[1,0])
 		ax4 = fig.add_subplot(gs[1,1])
-		ax5 = fig.add_subplot(gs[0,2])
-		ax6 = fig.add_subplot(gs[1,2])
 
 		c1 = ax1.contourf(xx, zz, np.transpose(u), levels=np.linspace(-u_lim, u_lim, 51), cmap='RdBu_r')
 		c1_bar = fig.colorbar(c1, ax=ax1)
@@ -591,12 +588,6 @@ if plot_snapshots:
 		ax4.set_xlim(0, ana_t[-1])
 		ax4.set_ylabel("KE")
 		ax4.set_xlabel(r"Time / $\tau_\nu$")
-
-		c5 = ax5.contourf(xx, zz, np.transpose(RS), levels=np.linspace(-RS_lim, RS_lim, 51), cmap='RdBu_r')
-		c5_bar = fig.colorbar(c5, ax=ax5)
-		c5_bar.set_label("Reynolds stress", rotation=0)
-		ax2.set_ylabel("z")
-		ax2.set_xlabel("y")
 
 		plt.savefig(save_direc + "snapshots/fig_{:03d}".format(i))
 

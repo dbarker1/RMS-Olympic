@@ -6,4 +6,4 @@ for file_name in files:
     print("Opened file " + file_name)
     for ana_key in list(ana.keys()):
         obj = ana[ana_key]
-        print("The shape of " + obj + " is " + str(obj.shape) + ".")
+        print("The shape of " + obj.name + " is " + str(obj.shape) + ".")

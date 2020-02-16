@@ -103,7 +103,9 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     E_def_all = np.array(file['tasks']['E_def'])[:,0,:]
     E_F_conv_all = np.array(file['tasks']['E_F_conv'])[:,0,:]
     Re = np.array(file['tasks']['Re'])[:,0,:]                   ## NEW!!
-    R_stress_all = np.array(file['tasks']['RS_yz'])
+    RS_uv = np.array(file['tasks']['RS_xy'])
+    RS_uw = np.array(file['tasks']['RS_xz'])
+    RS_vw = np.array(file['tasks']['RS_yz'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -169,25 +171,42 @@ else:
 # Viscous time is the dynamical time (L/u) * Reynolds number (uL/nu) = L^2/(nu * c^2)
 # Plot on contour with one axis being time
 
-RS_z = R_stress_all[:,0,:]
-RS_y = R_stress_all[:,:,0]
+## Have integrated wrt y, so plot over z
+RS_uv = RS_uv[:,0,:]
+RS_uw = RS_uw[:,0,:]
+RS_vw = RS_vw[:,0,:]
 
-min_RS = np.min(R_stress_all)
-max_RS = np.max(R_stress_all)
+RS_uv_min = np.min(RS_uv)
+RS_uw_min = np.min(RS_uw)
+RS_vw_min = np.min(RS_vw)
 
-if abs(min_RS) >= abs(max_RS):
-	RS_lim = abs(min_RS)
+RS_uv_max = np.max(RS_uv)
+RS_uw_max = np.max(RS_uw)
+RS_vw_max = np.max(RS_vw)
+
+if abs(RS_uv_min) >= abs(RS_uv_max):
+	RS_lim = abs(RS_uv_min)
 else:
-	RS_lim = abs(max_RS)
+	RS_lim = abs(RS_uv_max)
 
-RS_z_t = np.mean(np.array(RS_z), axis=1)
-RS_y_t = np.mean(np.array(RS_y), axis=1)
-RS_z_z = np.mean(np.array(RS_z), axis=0)
-RS_y_y = np.mean(np.array(RS_y), axis=0)
+if abs(RS_uw_min) >= abs(RS_uw_max):
+	RS_lim = abs(RS_uw_min)
+else:
+	RS_lim = abs(RS_uw_max)
 
-RS_2D_t = np.vstack((RS_z_t, RS_y_t))
+if abs(RS_vw_min) >= abs(RS_vw_max):
+	RS_lim = abs(RS_vw_min)
+else:
+	RS_lim = abs(RS_vw_max)
 
-arrays = [RS_z, RS_y, RS_z_t, RS_y_t, RS_z_z, RS_y_y, RS_2D_t]
+RS_uv_t = np.mean(np.array(RS_uv), axis=1)
+RS_uw_t = np.mean(np.array(RS_uw), axis=1)
+RS_vw_t = np.mean(np.array(RS_vw), axis=1)
+RS_uv_z = np.mean(np.array(RS_uv), axis=0)
+RS_uw_z = np.mean(np.array(RS_uw), axis=0)
+RS_vw_z = np.mean(np.array(RS_vw), axis=0)
+
+arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z]
 
 print("diagnostic: shape of arrays")
 for arr in arrays:

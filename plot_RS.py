@@ -10,6 +10,8 @@ from decimal import Decimal
 #from run_param_file import Np, Ra, Ta, Phi
 import sys
 import importlib
+import fractions
+
 from shutil import copy2
 
 #print(sys.argv)
@@ -191,7 +193,13 @@ RS_uv_z = np.mean(np.array(RS_uv), axis=0)
 RS_uw_z = np.mean(np.array(RS_uw), axis=0)
 RS_vw_z = np.mean(np.array(RS_vw), axis=0)
 
-arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z]
+grad_RS_uv=[]
+for i in range (0, len(z) - 1):
+    grad_RS_uv.append( (RS_uv_z[i] - RS_uv_z[i+1])/(z[i] - z[i+1]) )
+
+grad_RS_uv=np.array(grad_RS_uv)
+
+arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z, grad_RS_uv,]
 
 print("diagnostic: shape of arrays")
 for arr in arrays:
@@ -274,6 +282,15 @@ plt.savefig(save_direc + "RS_vw_z")
 plt.close()
 plt.clf()
 
+plt.plot(grad_RS_uv, z[0:-1])
+plt.title(save_direc)
+plt.xlabel(r"$\left\langle\overline{uv}\right\rangle$")
+plt.ylabel(r"z")
+plt.ylim(0,z[-1])
+plt.xlim(np.min(grad_RS_uv) * 1.1, np.max(grad_RS_uv) * 1.1)
+plt.savefig(save_direc + "grad_RS_uv")
+plt.close()
+plt.clf()
 # ======== End of Reynolds Stresses ========
 
 title_name = "Np = {:.2e}, Ra = {:.2e}, Ta = {:.2e}, \nPhi = {:d}, Time average = {:.2f} ".format(Np,Ra,Ta,Phi,avg_t_range) + r"$\tau_\nu$"

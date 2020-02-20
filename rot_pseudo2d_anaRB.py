@@ -44,7 +44,7 @@ Pr = rpf.Pr
 Ra = float(sys.argv[2]) #rpf.Ra
 Np = float(sys.argv[1]) #rpf.Np
 Ta = float(sys.argv[3]) #rpf.Ta
-Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi 
+Lat = float(sys.argv[4]) * np.pi / 180 #rpf.Phi
 m = rpf.m
 #theta = rpf.theta
 theta = 1 - np.exp(-Np/m)
@@ -189,6 +189,12 @@ analysis.add_task("(u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout=
 # analysis.add_task("(v - (integ(v, 'y')/Ly)) * (u - (integ(u, 'x')/Lx))", layout='g', name='RS_yx')
 analysis.add_task("(v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout='g', name='RS_yz')
 
+
+analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly))))", layout='g', name='RS_xy_dz')
+analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_xz_dz')
+analysis.add_task("(dz((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_yz_dz')
+
+
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')
 analysis.add_task("integ((-1)*rho_ref*T_ref*sz, 'y')/Ly", layout='g', name='L_cond')
@@ -270,5 +276,3 @@ finally:
     logger.info('Sim end time: %f' %solver.sim_time)
     logger.info('Run time: %.2f sec' %(end_time-start_time))
     logger.info('Run time: %f cpu-hr' %((end_time-start_time)/60/60*domain.dist.comm_cart.size))
-
-

@@ -183,19 +183,33 @@ def find_limit (arr):
 # Plot on contour with one axis being time
 
 ## Have integrated wrt y, so plot over z
-RS_uv = RS_uv[:,0,:]
-RS_uw = RS_uw[:,0,:]
-RS_vw = RS_vw[:,0,:]
-dRS_uv = dRS_uv[:,0,:]
-dRS_uw = dRS_uw[:,0,:]
-dRS_vw = dRS_vw[:,0,:]
+# Need to average over y, not ust take a slice
+# in a tilted case, generally red/blue at top and other at bottom
+# at vertical, generally mixed
+# can add rho bar in later - doesn't have to be in simulation
+# still run at ta~1e4 but ra~1e5
+# in boussinesq case expect symmetry about half way through layetr
+# Fiddle with rossby number -eg. ra, ta. Does this make the RSs look more like the boussinesq case?
+# Fix Ro at bottom of layer. Does 
+RS_uv = np.mean(np.array(RS_uv), axis=1)
+RS_uw = np.mean(np.array(RS_uw), axis=1)
+RS_vw = np.mean(np.array(RS_vw), axis=1)
+dRS_uv = np.mean(np.array(dRS_uv), axis=1)
+dRS_uw = np.mean(np.array(dRS_uw), axis=1)
+dRS_vw = np.mean(np.array(dRS_vw), axis=1)
 
-RS_uv_lim = find_limit (RS_uv)
-RS_uw_lim = find_limit (RS_uw)
-RS_vw_lim = find_limit (RS_vw)
-dRS_uv_lim = find_limit (dRS_uv)
-dRS_uw_lim = find_limit (dRS_uw)
-dRS_vw_lim = find_limit (dRS_vw)
+arrays = [RS_uv, RS_uw, RS_vw, dRS_uv, dRS_uw, dRS_vw]
+
+print("diagnostic: shape of arrays")
+for arr in arrays:
+	print(arr.shape)
+
+#RS_uv = RS_uv[:,0,:]
+#RS_uw = RS_uw[:,0,:]
+#RS_vw = RS_vw[:,0,:]
+#dRS_uv = dRS_uv[:,0,:]
+#dRS_uw = dRS_uw[:,0,:]
+#dRS_vw = dRS_vw[:,0,:]
 
 RS_uv_t = np.mean(np.array(RS_uv), axis=1)
 RS_uw_t = np.mean(np.array(RS_uw), axis=1)
@@ -305,12 +319,6 @@ cbar.set_label(r"$ \frac{ \partial \left\langle\  \overline{vw} \right\rangle } 
 plt.savefig(save_direc + "dRS_vw_contour")
 plt.close()
 plt.clf()
-
-
-#	c1 = plt.contourf(yy, zz, RS_2D_t)
-#	c1.cmap.set_over('red')
-#	c1.cmap.set_under('blue')
-#	c1.changed()
 
 dRS_uv_t = np.mean(np.array(dRS_uv), axis=1)
 plt.plot(dRS_uv_t, ana_t)

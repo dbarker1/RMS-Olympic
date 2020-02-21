@@ -83,15 +83,15 @@ if os.path.exists(save_direc + 'raw_data/run_parameters/') == False:
 if os.path.exists(save_direc + 'raw_data/snapshots/') == False:
     pathlib.Path(save_direc + 'raw_data/snapshots/').mkdir(parents=True)
 
-try:
-    print('copying analysis')
-    copy2('raw_data/analysis/analysis_' + run_name + '.h5', save_direc + 'raw_data/analysis/')
-    print('copying run_parameters')
-    copy2('raw_data/run_parameters/run_parameters_' + run_name + '.h5', save_direc + 'raw_data/run_parameters/')
-    print('copying snapshots')
-    copy2('raw_data/snapshots/snapshots_' + run_name + '.h5', save_direc + 'raw_data/snapshots/')
-except Exception as e:
-    print('Error copying:', e)
+#try:
+#    print('copying analysis')
+#    copy2('raw_data/analysis/analysis_' + run_name + '.h5', save_direc + 'raw_data/analysis/')
+#    print('copying run_parameters')
+#    copy2('raw_data/run_parameters/run_parameters_' + run_name + '.h5', save_direc + 'raw_data/run_parameters/')
+#    print('copying snapshots')
+#    copy2('raw_data/snapshots/snapshots_' + run_name + '.h5', save_direc + 'raw_data/snapshots/')
+#except Exception as e:
+#    print('Error copying:', e)
 
 with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as file:
     L_cond_all = np.array(file['tasks']['L_cond'])[:,0,:]
@@ -229,15 +229,15 @@ for arr in arrays:
 
 # COntour plots
 
-plt.contour(dRS_uv[0], z, dRS_uv[1])
-plt.title(save_direc)
-plt.xlabel(r"Time, $t_\mu$")
-plt.ylabel(r"z$")
+#plt.contour(dRS_uv[0], z, dRS_uv[1])
+#plt.title(save_direc)
+#plt.xlabel(r"Time, $t_\mu$")
+#plt.ylabel(r"z$")
 #plt.ylim(0,ana_t[-1])
 #plt.xlim(np.min(RS_uv_t) * 1.1, np.max(RS_uv_t) * 1.1)
-plt.savefig(save_direc + "dRS_uv_t")
-plt.close()
-plt.clf()
+#plt.savefig(save_direc + "dRS_uv_t")
+#plt.close()
+#plt.clf()
 
 
 
@@ -247,6 +247,41 @@ plt.clf()
 #	c1.cmap.set_over('red')
 #	c1.cmap.set_under('blue')
 #	c1.changed()
+
+dRS_uv_t = np.mean(np.array(dRS_uv), axis=1)
+plt.plot(dRS_uv_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uv}\right\rangle } { \delta z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_uv_t) * 1.1, np.max(dRS_uv_t) * 1.1)
+plt.savefig(save_direc + "dRS_uv_t")
+plt.close()
+plt.clf()
+
+dRS_uw_t = np.mean(np.array(dRS_uw), axis=1)
+plt.plot(dRS_uw_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uv}\right\rangle } { \delta z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_uw_t) * 1.1, np.max(dRS_uw_t) * 1.1)
+plt.savefig(save_direc + "dRS_uw_t")
+plt.close()
+plt.clf()
+
+dRS_vw_t = np.mean(np.array(dRS_vw), axis=1)
+plt.plot(dRS_vw_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uv}\right\rangle } { \delta z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_vw_t) * 1.1, np.max(dRS_vw_t) * 1.1)
+plt.savefig(save_direc + "dRS_vw_t")
+plt.close()
+plt.clf()
+
+##### END OF DIFFERENTIALS
 
 plt.plot(RS_uv_t, ana_t)
 plt.title(save_direc)

@@ -194,9 +194,9 @@ analysis.add_task("dz( integ( ((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly
 analysis.add_task("dz( integ( ((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))), 'y')/Ly )", layout='g', name='RS_yz_dz')
 
 # Mean flows:
-analysis.add_task("integ( u, dy )/Ly", layout='g', name='u_bar')
-analysis.add_task("integ( v, dy )/Ly", layout='g', name='v_bar')
-analysis.add_task("integ( w, dy )/Ly", layout='g', name='w_bar')
+analysis.add_task("integ( u, 'y' )/Ly", layout='g', name='u_bar')
+analysis.add_task("integ( v, 'y' )/Ly", layout='g', name='v_bar')
+analysis.add_task("integ( w, 'y' )/Ly", layout='g', name='w_bar')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')

@@ -183,16 +183,15 @@ analysis.add_task("integ(s,'y')/Ly", layout='g', name='<s>_y')
 # Mean Reynolds number
 analysis.add_task("integ( integ( sqrt(u*u + v*v + w*w) , 'y')/Ly, 'z')/Lz", layout='g', name='Re')
 
-## Calculate Reynolds stress
+# Reynolds stresses:
 analysis.add_task("(u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly))", layout='g', name='RS_xy')
 analysis.add_task("(u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout='g', name='RS_xz')
-# analysis.add_task("(v - (integ(v, 'y')/Ly)) * (u - (integ(u, 'x')/Lx))", layout='g', name='RS_yx')
 analysis.add_task("(v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout='g', name='RS_yz')
 
-
-analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly))))", layout='g', name='RS_xy_dz')
-analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_xz_dz')
-analysis.add_task("(dz((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_yz_dz')
+# Differential Reynolds stresses:
+analysis.add_task("dz( ( u - (integ(u, 'y')/Ly) ) * ( v - (integ(v, 'y')/Ly) ) )", layout='g', name='RS_xy_dz')
+analysis.add_task("dz( ( u - (integ(u, 'y')/Ly) ) * ( w - (integ(w, 'y')/Ly) ) )", layout='g', name='RS_xz_dz')
+analysis.add_task("dz( ( v - (integ(v, 'y')/Ly) ) * ( w - (integ(w, 'y')/Ly) ) )", layout='g', name='RS_yz_dz')
 
 
 # Flux decomposition - Internal energy equation

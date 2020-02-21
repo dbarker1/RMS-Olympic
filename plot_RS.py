@@ -108,6 +108,9 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     RS_uv = np.array(file['tasks']['RS_xy'])
     RS_uw = np.array(file['tasks']['RS_xz'])
     RS_vw = np.array(file['tasks']['RS_yz'])
+    dRS_uv = np.array(file['tasks']['RS_xy_dz'])
+    dRS_uw = np.array(file['tasks']['RS_xz_dz'])
+    dRS_vw = np.array(file['tasks']['RS_yz_dz'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -177,6 +180,9 @@ else:
 RS_uv = RS_uv[:,0,:]
 RS_uw = RS_uw[:,0,:]
 RS_vw = RS_vw[:,0,:]
+dRS_uv = dRS_uv[:,0,:]
+dRS_uw = dRS_uw[:,0,:]
+dRS_vw = dRS_vw[:,0,:]
 
 RS_uv_min = np.min(RS_uv)
 RS_uw_min = np.min(RS_uw)
@@ -220,6 +226,22 @@ for arr in arrays:
 	print(arr.shape)
 
 ## Needs contour over space coordinates
+
+# COntour plots
+
+plt.contour(dRS_uv[0], z, dRS_uv[1])
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\mu$")
+plt.ylabel(r"z$")
+#plt.ylim(0,ana_t[-1])
+#plt.xlim(np.min(RS_uv_t) * 1.1, np.max(RS_uv_t) * 1.1)
+plt.savefig(save_direc + "dRS_uv_t")
+plt.close()
+plt.clf()
+
+
+
+
 
 #	c1 = plt.contourf(yy, zz, RS_2D_t)
 #	c1.cmap.set_over('red')

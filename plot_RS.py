@@ -219,7 +219,7 @@ for i in range (0, len(z) - 1):
 
 grad_RS_vw=np.array(grad_RS_vw)
 
-arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z, grad_RS_uv,]
+arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z, grad_RS_uv, dRS_uv]
 
 print("diagnostic: shape of arrays")
 for arr in arrays:
@@ -229,18 +229,71 @@ for arr in arrays:
 
 # COntour plots
 
-#plt.contour(dRS_uv[0], z, dRS_uv[1])
-#plt.title(save_direc)
-#plt.xlabel(r"Time, $t_\mu$")
-#plt.ylabel(r"z$")
-#plt.ylim(0,ana_t[-1])
-#plt.xlim(np.min(RS_uv_t) * 1.1, np.max(RS_uv_t) * 1.1)
-#plt.savefig(save_direc + "dRS_uv_t")
-#plt.close()
-#plt.clf()
+plt.contourf(ana_t, z, np.transpose(RS_uv), levels=np.linspace(np.min(RS_uv), np.max(RS_uv), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_uv_contour")
+plt.close()
+plt.clf()
 
+plt.contourf(ana_t, z, np.transpose(RS_uw), levels=np.linspace(np.min(RS_uw), np.max(RS_uw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_uw_contour")
+plt.close()
+plt.clf()
 
+plt.contourf(ana_t, z, np.transpose(RS_vw), levels=np.linspace(np.min(RS_vw), np.max(RS_vw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_vw_contour")
+plt.close()
+plt.clf()
 
+plt.contourf(ana_t, z, np.transpose(dRS_uv), levels=np.linspace(np.min(dRS_uv), np.max(dRS_uv), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_uv_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(dRS_uw), levels=np.linspace(np.min(dRS_uw), np.max(dRS_uw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_uw_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(dRS_vw), levels=np.linspace(np.min(dRS_vw), np.max(dRS_vw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_vw_contour")
+plt.close()
+plt.clf()
 
 
 #	c1 = plt.contourf(yy, zz, RS_2D_t)
@@ -281,6 +334,39 @@ plt.savefig(save_direc + "dRS_vw_t")
 plt.close()
 plt.clf()
 
+dRS_uv_z = np.mean(np.array(dRS_uv), axis=0)
+plt.plot(dRS_uv_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uv}\right\rangle } { \delta z}$")
+plt.ylabel(r"z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_uv_z) * 1.1, np.max(dRS_uv_z) * 1.1)
+plt.savefig(save_direc + "dRS_uv_z")
+plt.close()
+plt.clf()
+
+dRS_uw_z = np.mean(np.array(dRS_uw), axis=0)
+plt.plot(dRS_uw_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uw}\right\rangle } { \delta z}$")
+plt.ylabel(r"z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_uw_z) * 1.1, np.max(dRS_uw_z) * 1.1)
+plt.savefig(save_direc + "dRS_uw_z")
+plt.close()
+plt.clf()
+
+dRS_vw_z = np.mean(np.array(dRS_vw), axis=0)
+plt.plot(dRS_vw_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{vw}\right\rangle } { \delta z}$")
+plt.ylabel(r"z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(np.min(dRS_vw_z) * 1.1, np.max(dRS_vw_z) * 1.1)
+plt.savefig(save_direc + "dRS_vw_z")
+plt.close()
+plt.clf()
+
 ##### END OF DIFFERENTIALS
 
 plt.plot(RS_uv_t, ana_t)
@@ -312,16 +398,6 @@ plt.xlim(np.min(RS_vw_t) * 1.1, np.max(RS_vw_t) * 1.1)
 plt.savefig(save_direc + "RS_vw_t")
 plt.close()
 plt.clf()
-
-#fig = plt.figure()
-#ax = fig.gca(projection='3d')
-#xxx = RS_z_t
-#yyy = RS_y_t
-#zzz = ana_t
-#ax.plot(xxx, yyy, zzz, label="RS av. over position")
-#plt.savefig(save_direc + "RS_t_3D")
-#plt.close()
-#plt.clf()
 
 plt.plot(RS_uv_z, z)
 plt.title(save_direc)
@@ -373,7 +449,6 @@ plt.savefig(save_direc + "grad_RS_uw")
 plt.close()
 plt.clf()
 
-
 plt.plot(grad_RS_vw, z[0:-1])
 plt.title(save_direc)
 plt.xlabel(r"$ \frac{  \delta \left\langle\ \overline{vw}\right\rangle } { \delta z}$")
@@ -383,6 +458,7 @@ plt.xlim(np.min(grad_RS_vw) * 1.1, np.max(grad_RS_vw) * 1.1)
 plt.savefig(save_direc + "grad_RS_vw")
 plt.close()
 plt.clf()
+
 # ======== End of Reynolds Stresses ========
 
 title_name = "Np = {:.2e}, Ra = {:.2e}, Ta = {:.2e}, \nPhi = {:d}, Time average = {:.2f} ".format(Np,Ra,Ta,Phi,avg_t_range) + r"$\tau_\nu$"

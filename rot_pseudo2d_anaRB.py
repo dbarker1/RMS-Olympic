@@ -190,9 +190,9 @@ analysis.add_task("(u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout=
 analysis.add_task("(v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))", layout='g', name='RS_yz')
 
 
-analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly))))", layout='g', name='RS_xy_dz')
-analysis.add_task("(dz((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_xz_dz')
-analysis.add_task("(dz((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))))", layout='g', name='RS_yz_dz')
+analysis.add_task("dz( ( u - (integ(u, 'y')/Ly) ) * ( v - (integ(v, 'y')/Ly) ) )", layout='g', name='RS_xy_dz')
+analysis.add_task("dz( ( u - (integ(u, 'y')/Ly) ) * ( w - (integ(w, 'y')/Ly) ) )", layout='g', name='RS_xz_dz')
+analysis.add_task("dz( ( v - (integ(v, 'y')/Ly) ) * ( w - (integ(w, 'y')/Ly) ) )", layout='g', name='RS_yz_dz')
 
 
 # Flux decomposition - Internal energy equation

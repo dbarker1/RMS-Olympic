@@ -1,3 +1,4 @@
+
 from dedalus import public as de
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -83,15 +84,15 @@ if os.path.exists(save_direc + 'raw_data/run_parameters/') == False:
 if os.path.exists(save_direc + 'raw_data/snapshots/') == False:
     pathlib.Path(save_direc + 'raw_data/snapshots/').mkdir(parents=True)
 
-try:
-    print('copying analysis')
-    copy2('raw_data/analysis/analysis_' + run_name + '.h5', save_direc + 'raw_data/analysis/')
-    print('copying run_parameters')
-    copy2('raw_data/run_parameters/run_parameters_' + run_name + '.h5', save_direc + 'raw_data/run_parameters/')
-    print('copying snapshots')
-    copy2('raw_data/snapshots/snapshots_' + run_name + '.h5', save_direc + 'raw_data/snapshots/')
-except Exception as e:
-    print('Error copying:', e)
+#try:
+#    print('copying analysis')
+#    copy2('raw_data/analysis/analysis_' + run_name + '.h5', save_direc + 'raw_data/analysis/')
+#    print('copying run_parameters')
+#    copy2('raw_data/run_parameters/run_parameters_' + run_name + '.h5', save_direc + 'raw_data/run_parameters/')
+#    print('copying snapshots')
+#    copy2('raw_data/snapshots/snapshots_' + run_name + '.h5', save_direc + 'raw_data/snapshots/')
+#except Exception as e:
+#    print('Error copying:', e)
 
 with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as file:
     L_cond_all = np.array(file['tasks']['L_cond'])[:,0,:]
@@ -108,6 +109,9 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     RS_uv = np.array(file['tasks']['RS_xy'])
     RS_uw = np.array(file['tasks']['RS_xz'])
     RS_vw = np.array(file['tasks']['RS_yz'])
+    dRS_uv = np.array(file['tasks']['RS_xy_dz'])
+    dRS_uw = np.array(file['tasks']['RS_xz_dz'])
+    dRS_vw = np.array(file['tasks']['RS_yz_dz'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -167,6 +171,12 @@ else:
 
 # ======== Plotting Reynolds Stresses ========
 
+def find_limit (arr):
+    if (abs(np.min(arr)) >= abs(np.max(arr))):
+        return -1 * abs(np.min(arr)), abs(np.min(arr))
+    else:
+        return -1 * abs(np.max(arr)), abs(np.max(arr))
+
 # MEETING NOTES:
 # Normally see variations in entropy profile w. Dedalus is a spectral code so accurate for solving D.E.: no numerical dissipation.
 # Generally need Re = 1 at grid scale (1/resolution)
@@ -177,14 +187,16 @@ else:
 RS_uv = RS_uv[:,0,:]
 RS_uw = RS_uw[:,0,:]
 RS_vw = RS_vw[:,0,:]
+dRS_uv = dRS_uv[:,0,:]
+dRS_uw = dRS_uw[:,0,:]
+dRS_vw = dRS_vw[:,0,:]
 
-RS_uv_min = np.min(RS_uv)
-RS_uw_min = np.min(RS_uw)
-RS_vw_min = np.min(RS_vw)
-
-RS_uv_max = np.max(RS_uv)
-RS_uw_max = np.max(RS_uw)
-RS_vw_max = np.max(RS_vw)
+RS_uv_lim = find_limit (RS_uv)
+RS_uw_lim = find_limit (RS_uw)
+RS_vw_lim = find_limit (RS_vw)
+dRS_uv_lim = find_limit (dRS_uv)
+dRS_uw_lim = find_limit (dRS_uw)
+dRS_vw_lim = find_limit (dRS_vw)
 
 RS_uv_t = np.mean(np.array(RS_uv), axis=1)
 RS_uw_t = np.mean(np.array(RS_uw), axis=1)
@@ -213,7 +225,7 @@ for i in range (0, len(z) - 1):
 
 grad_RS_vw=np.array(grad_RS_vw)
 
-arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z, grad_RS_uv,]
+arrays = [RS_uv_t, RS_uw_t, RS_vw_t, RS_uv_z, RS_uw_z, RS_vw_z, ana_t, z, grad_RS_uv, dRS_uv]
 
 print("diagnostic: shape of arrays")
 for arr in arrays:
@@ -221,17 +233,154 @@ for arr in arrays:
 
 ## Needs contour over space coordinates
 
+# COntour plots
+
+plt.contourf(ana_t, z, np.transpose(RS_uv), levels=np.linspace(find_limit (RS_uv), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_uv_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(RS_uw), levels=np.linspace(find_limit (RS_uw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_uw_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(RS_vw), levels=np.linspace(find_limit (RS_vw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "RS_vw_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(dRS_uv), levels=np.linspace(find_limit (dRS_uv), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_uv_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(dRS_uw), levels=np.linspace(find_limit (dRS_uw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_uw_contour")
+plt.close()
+plt.clf()
+
+plt.contourf(ana_t, z, np.transpose(dRS_vw), levels=np.linspace(find_limit (dRS_vw), 51), cmap='RdBu_r')
+plt.title(save_direc)
+plt.xlabel(r"Time, $t_\nu$")
+plt.ylabel(r"$z$")
+plt.xlim(0,ana_t[-1])
+plt.ylim(-np.min(z), np.max(z))
+plt.colorbar()
+plt.savefig(save_direc + "dRS_vw_contour")
+plt.close()
+plt.clf()
+
+
 #	c1 = plt.contourf(yy, zz, RS_2D_t)
 #	c1.cmap.set_over('red')
 #	c1.cmap.set_under('blue')
 #	c1.changed()
+
+dRS_uv_t = np.mean(np.array(dRS_uv), axis=1)
+plt.plot(dRS_uv_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uv}\right\rangle } { \partial z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_uv_t))
+plt.savefig(save_direc + "dRS_uv_t")
+plt.close()
+plt.clf()
+
+dRS_uw_t = np.mean(np.array(dRS_uw), axis=1)
+plt.plot(dRS_uw_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uv}\right\rangle } { \partial z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_uw_t))
+plt.savefig(save_direc + "dRS_uw_t")
+plt.close()
+plt.clf()
+
+dRS_vw_t = np.mean(np.array(dRS_vw), axis=1)
+plt.plot(dRS_vw_t, ana_t)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uv}\right\rangle } { \partial z}$")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_vw_t))
+plt.savefig(save_direc + "dRS_vw_t")
+plt.close()
+plt.clf()
+
+dRS_uv_z = np.mean(np.array(dRS_uv), axis=0)
+plt.plot(dRS_uv_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uv}\right\rangle } { \partial z}$")
+plt.ylabel(r"$z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_uv_z))
+plt.savefig(save_direc + "dRS_uv_z")
+plt.close()
+plt.clf()
+
+dRS_uw_z = np.mean(np.array(dRS_uw), axis=0)
+plt.plot(dRS_uw_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uw}\right\rangle } { \partial z}$")
+plt.ylabel(r"$z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_uw_z))
+plt.savefig(save_direc + "dRS_uw_z")
+plt.close()
+plt.clf()
+
+dRS_vw_z = np.mean(np.array(dRS_vw), axis=0)
+plt.plot(dRS_vw_z, z)
+plt.title(save_direc)
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{vw}\right\rangle } { \partial z}$")
+plt.ylabel(r"$z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (dRS_vw_z))
+plt.savefig(save_direc + "dRS_vw_z")
+plt.close()
+plt.clf()
+
+##### END OF DIFFERENTIALS
 
 plt.plot(RS_uv_t, ana_t)
 plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{uv}\right\rangle$")
 plt.ylabel(r"Time / $\tau_\nu$")
 plt.ylim(0,ana_t[-1])
-plt.xlim(np.min(RS_uv_t) * 1.1, np.max(RS_uv_t) * 1.1)
+plt.xlim(find_limit (RS_uv_t))
 plt.savefig(save_direc + "RS_uv_t")
 plt.close()
 plt.clf()
@@ -241,7 +390,7 @@ plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{uw}\right\rangle$")
 plt.ylabel(r"Time / $\tau_\nu$")
 plt.ylim(0,ana_t[-1])
-plt.xlim(np.min(RS_uw_t) * 1.1, np.max(RS_uw_t) * 1.1)
+plt.xlim(find_limit (RS_uw_t))
 plt.savefig(save_direc + "RS_uw_t")
 plt.close()
 plt.clf()
@@ -251,27 +400,17 @@ plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{vw}\right\rangle$")
 plt.ylabel(r"Time / $\tau_\nu$")
 plt.ylim(0,ana_t[-1])
-plt.xlim(np.min(RS_vw_t) * 1.1, np.max(RS_vw_t) * 1.1)
+plt.xlim(find_limit (RS_vw_t))
 plt.savefig(save_direc + "RS_vw_t")
 plt.close()
 plt.clf()
-
-#fig = plt.figure()
-#ax = fig.gca(projection='3d')
-#xxx = RS_z_t
-#yyy = RS_y_t
-#zzz = ana_t
-#ax.plot(xxx, yyy, zzz, label="RS av. over position")
-#plt.savefig(save_direc + "RS_t_3D")
-#plt.close()
-#plt.clf()
 
 plt.plot(RS_uv_z, z)
 plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{uv}\right\rangle$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(RS_uv_z) * 1.1, np.max(RS_uv_z) * 1.1)
+plt.xlim(find_limit (RS_uv_z))
 plt.savefig(save_direc + "RS_uv_z")
 plt.close()
 plt.clf()
@@ -281,7 +420,7 @@ plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{uw}\right\rangle$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(RS_uw_z) * 1.1, np.max(RS_uw_z) * 1.1)
+plt.xlim(find_limit (RS_uw_z))
 plt.savefig(save_direc + "RS_uw_z")
 plt.close()
 plt.clf()
@@ -291,41 +430,41 @@ plt.title(save_direc)
 plt.xlabel(r"$\left\langle\overline{vw}\right\rangle$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(RS_vw_z) * 1.1, np.max(RS_vw_z) * 1.1)
+plt.xlim(find_limit (RS_vw_z))
 plt.savefig(save_direc + "RS_vw_z")
 plt.close()
 plt.clf()
 
 plt.plot(grad_RS_uv, z[0:-1])
 plt.title(save_direc)
-plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uv}\right\rangle } { \delta z}$")
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uv}\right\rangle } { \partial z}$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(grad_RS_uv) * 1.1, np.max(grad_RS_uv) * 1.1)
+plt.xlim(find_limit (grad_RS_uv))
 plt.savefig(save_direc + "grad_RS_uv")
 plt.close()
 plt.clf()
 
 plt.plot(grad_RS_uw, z[0:-1])
 plt.title(save_direc)
-plt.xlabel(r"$ \frac{ \delta \left\langle\  \overline{uw}\right\rangle } { \delta z}$")
+plt.xlabel(r"$ \frac{ \partial \left\langle\  \overline{uw}\right\rangle } { \partial z}$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(grad_RS_uw) * 1.1, np.max(grad_RS_uw) * 1.1)
+plt.xlim(find_limit (grad_RS_uw))
 plt.savefig(save_direc + "grad_RS_uw")
 plt.close()
 plt.clf()
 
-
 plt.plot(grad_RS_vw, z[0:-1])
 plt.title(save_direc)
-plt.xlabel(r"$ \frac{  \delta \left\langle\ \overline{vw}\right\rangle } { \delta z}$")
+plt.xlabel(r"$ \frac{  \partial \left\langle\ \overline{vw}\right\rangle } { \partial z}$")
 plt.ylabel(r"z")
 plt.ylim(0,z[-1])
-plt.xlim(np.min(grad_RS_vw) * 1.1, np.max(grad_RS_vw) * 1.1)
+plt.xlim(find_limit (grad_RS_vw))
 plt.savefig(save_direc + "grad_RS_vw")
 plt.close()
 plt.clf()
+
 # ======== End of Reynolds Stresses ========
 
 title_name = "Np = {:.2e}, Ra = {:.2e}, Ta = {:.2e}, \nPhi = {:d}, Time average = {:.2f} ".format(Np,Ra,Ta,Phi,avg_t_range) + r"$\tau_\nu$"

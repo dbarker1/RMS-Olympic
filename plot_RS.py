@@ -114,6 +114,7 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     u_bar = np.array(file['tasks']['u_bar'])
     v_bar = np.array(file['tasks']['v_bar'])
     w_bar = np.array(file['tasks']['w_bar'])
+    Ro = np.array(file['tasks']['Ro'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -205,9 +206,6 @@ def get_title (direc):
 # in boussinesq case expect symmetry about half way through layer
 # Fiddle with rossby number -eg. ra, ta. Does this make the RSs look more like the boussinesq case?
 # Fix Ro at bottom of layer. Does 
-
-# Meeting on 24th January
-# 
 
 # If required (for old anelastic script)
 # RS_uv = np.mean(np.array(RS_uv), axis=1)

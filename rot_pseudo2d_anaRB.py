@@ -221,6 +221,10 @@ analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (
                                 , 'y'), 'z')*(((Pr*Pr*theta)/Ra )/(Ly*Lz)) ", layout='g', name='E_def')
 analysis.add_task(" integ( (integ(rho_ref*T_ref*s*w,'y')/Ly)/T_ref, 'z')*Pr*theta/Lz ", layout='g', name='E_F_conv')
 
+# E_def as a function of the z direction
+analysis.add_task(" integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
+                                        , 'y')*(((Pr*Pr*theta)/Ra )/(Ly)) ", layout='g', name='E_def_z')
+
 # Mean KE
 analysis.add_task(" integ( (integ(0.5*(u*u + v*v + w*w)*rho_ref,'y')/Ly), 'z')/Lz", layout='g', name='KE')
 

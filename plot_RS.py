@@ -439,6 +439,19 @@ plt.savefig(save_direc + "RS_vw_t.pdf")
 plt.close()
 plt.clf()
 
+def meansq (arr):
+    sqsum = 0
+    num = 0
+    for point in arr:
+        sqsum += point * point
+        num += 1
+
+    sqmean = sqsum / num
+    return np.sqrt(sqmean)    
+
+len_RS_z = len(RS_uv_z)
+
+print("RS_uv_z rms: " + str(meansq(RS_uv_z)))
 plt.plot(RS_uv_z, z)
 plt.title(get_title (save_direc))
 plt.xlabel(r"$\left\langle\overline{uv}\right\rangle$")
@@ -449,6 +462,7 @@ plt.savefig(save_direc + "RS_uv_z.pdf")
 plt.close()
 plt.clf()
 
+print("RS_uw_z rms: " + str(meansq(RS_uw_z)))
 plt.plot(RS_uw_z, z)
 plt.title(get_title (save_direc))
 plt.xlabel(r"$\left\langle\overline{uw}\right\rangle$")
@@ -459,6 +473,7 @@ plt.savefig(save_direc + "RS_uw_z.pdf")
 plt.close()
 plt.clf()
 
+print("RS_vw_z rms: " + str(meansq(RS_vw_z)))
 plt.plot(RS_vw_z, z)
 plt.title(get_title (save_direc))
 plt.xlabel(r"$\left\langle\overline{vw}\right\rangle$")

@@ -199,8 +199,8 @@ analysis.add_task("integ( v, 'y' )/Ly", layout='g', name='v_bar')
 analysis.add_task("integ( w, 'y' )/Ly", layout='g', name='w_bar')
 
 # Rossby numbers
-analysis.add_task(" integ( sqrt( (dy(w) - dz(v))**2 + (dz(u) - wx)**2 + (wx - dy(u))**2 ) / T, 'y' ) / Ly", layout='g', name='Ro_layer')
-analysis.add_task(" integ( integ( sqrt( (dy(w) - dz(v))**2 + (dz(u) - wx)**2 + (wx - dy(u))**2 ) / T, 'y' ), 'z') / (Ly * Lz)", layout='g', name='Ro_vol')
+analysis.add_task(" integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ) / Ly", layout='g', name='Ro_layer')
+analysis.add_task(" integ( integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ), 'z') / (Ly * Lz)", layout='g', name='Ro_vol')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')

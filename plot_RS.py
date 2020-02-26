@@ -190,7 +190,7 @@ def get_title (direc):
     return retval
 
 # MEETING NOTES:
-# Normally see variations in entropy profile w. Dedalus is a spectral code so accurate for solving 
+# Normally see variations in entropy profile w. Dedalus is a spectral code so accurate for solving
 # D.E.: no numerical dissipation.
 # Generally need Re = 1 at grid scale (1/resolution)
 # Viscous time is the dynamical time (L/u) * Reynolds number (uL/nu) = L^2/(nu * c^2)
@@ -205,7 +205,7 @@ def get_title (direc):
 # still run at ta~1e4 but ra~1e5
 # in boussinesq case expect symmetry about half way through layer
 # Fiddle with rossby number -eg. ra, ta. Does this make the RSs look more like the boussinesq case?
-# Fix Ro at bottom of layer. Does 
+# Fix Ro at bottom of layer. Does
 
 # If required (for old anelastic script)
 # RS_uv = np.mean(np.array(RS_uv), axis=1)
@@ -307,7 +307,7 @@ plt.clf()
 
 plt.contourf(ana_t, z, np.transpose(dRS_uv), levels=np.linspace(find_limit (dRS_uv)[0], find_limit (dRS_uv)[1], 51), cmap='RdBu_r')
 plt.title(get_title (save_direc))
-plt.xlabel(r"Time, $t_\nu$")  
+plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
@@ -407,6 +407,28 @@ plt.savefig(save_direc + "dRS_vw_z.pdf")
 plt.close()
 plt.clf()
 
+
+Ro_z = np.mean(np.array(Ro), axis=0)
+plt.plot(Ro_z, z)
+plt.title(get_title (save_direc))
+plt.xlabel(r" Rossby number (Ro) ")
+plt.ylabel(r"$z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (Ro_z))
+plt.savefig(save_direc + "Ro_z.pdf")
+plt.close()
+plt.clf()
+
+Ro_t = np.mean(np.array(Ro), axis=1)
+plt.plot(Ro_t, ana_t)
+plt.title(get_title (save_direc))
+plt.xlabel(" Rossby number (Ro) ")
+plt.ylabel(r"Time / $\tau_\nu$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (R0_t))
+plt.savefig(save_direc + "Ro_t.pdf")
+plt.close()
+plt.clf()
 ##### END OF DIFFERENTIALS
 
 plt.plot(RS_uv_t, ana_t)
@@ -447,7 +469,7 @@ def meansq (arr):
         num += 1
 
     sqmean = sqsum / num
-    return np.sqrt(sqmean)    
+    return np.sqrt(sqmean)
 
 len_RS_z = len(RS_uv_z)
 

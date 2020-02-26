@@ -221,7 +221,6 @@ RS_vw = RS_vw[:,0,:]
 dRS_uv = dRS_uv[:,0,:]
 dRS_uw = dRS_uw[:,0,:]
 dRS_vw = dRS_vw[:,0,:]
-Ro = Ro[:,0,:]
 u_bar = u_bar[:,0,:]
 v_bar = v_bar[:,0,:]
 w_bar = w_bar[:,0,:]
@@ -238,8 +237,6 @@ RS_vw_t = np.mean(np.array(RS_vw), axis=1)
 RS_uv_z = np.mean(np.array(RS_uv), axis=0)
 RS_uw_z = np.mean(np.array(RS_uw), axis=0)
 RS_vw_z = np.mean(np.array(RS_vw), axis=0)
-
-Ro_z = np.mean(np.array(Ro), axis=0)
 
 grad_RS_uv=[]
 for i in range (0, len(z) - 1):
@@ -409,13 +406,25 @@ plt.savefig(save_direc + "dRS_vw_z.pdf")
 plt.close()
 plt.clf()
 
+###### Plotting Rossby number ######
+
+Ro = Ro[:,0,:]
+Ro_z = np.mean(np.array(Ro), axis=0)
+
+num_sections = 8
+Ro_sections = []
+
+for i in range(num_sections):
+    Ro_sections.append(Ro_z[ i * len(Ro_z) / num_sections ])
+    print("Ro at z=" + str(i * len(Ro_z) / num_sections) + " is " + str(Ro_z[ i * len(Ro_z) / num_sections ]))
+
 Ro_tot = 0
-heights = 0
+count = 0
 for i in range(len(Ro_z)):
     Ro_tot += Ro_z[i]
-    heights += 1
+    count += 1
 
-Ro_glob_av = Ro_tot / heights
+Ro_glob_av = Ro_tot / count
 
 plt.plot(Ro_z, z)
 plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))

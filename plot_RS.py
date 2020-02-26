@@ -221,7 +221,7 @@ RS_vw = RS_vw[:,0,:]
 dRS_uv = dRS_uv[:,0,:]
 dRS_uw = dRS_uw[:,0,:]
 dRS_vw = dRS_vw[:,0,:]
-
+Ro = Ro[:,0,:]
 u_bar = u_bar[:,0,:]
 v_bar = v_bar[:,0,:]
 w_bar = w_bar[:,0,:]
@@ -414,7 +414,7 @@ plt.title(get_title (save_direc))
 plt.xlabel(r" Rossby number (Ro) ")
 plt.ylabel(r"$z$")
 plt.ylim(0,ana_t[-1])
-plt.xlim(find_limit (Ro_z))
+plt.xlim(1.1*find_limit (Ro_z))
 plt.savefig(save_direc + "Ro_z.pdf")
 plt.close()
 plt.clf()
@@ -425,7 +425,7 @@ plt.title(get_title (save_direc))
 plt.xlabel(" Rossby number (Ro) ")
 plt.ylabel(r"Time / $\tau_\nu$")
 plt.ylim(0,ana_t[-1])
-plt.xlim(find_limit (R0_t))
+plt.xlim(find_limit (Ro_t))
 plt.savefig(save_direc + "Ro_t.pdf")
 plt.close()
 plt.clf()

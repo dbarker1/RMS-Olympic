@@ -415,8 +415,8 @@ num_sections = 8
 Ro_sections = []
 
 for i in range(num_sections):
-    Ro_sections.append(Ro_z[ i * len(Ro_z) / num_sections ])
-    print("Ro at z=" + str(i * len(Ro_z) / num_sections) + " is " + str(Ro_z[ i * len(Ro_z) / num_sections ]))
+    Ro_sections.append(Ro_z[ int( i * len(Ro_z) / num_sections ) ])
+    print("Ro at z=" + str( int( i * len(Ro_z) / num_sections ) ) + " is " + str(Ro_z[ int( i * len(Ro_z) / num_sections ) ]))
 
 Ro_tot = 0
 count = 0

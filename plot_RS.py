@@ -114,7 +114,7 @@ with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as fil
     u_bar = np.array(file['tasks']['u_bar'])
     v_bar = np.array(file['tasks']['v_bar'])
     w_bar = np.array(file['tasks']['w_bar'])
-    Ro = np.array(file['tasks']['Ro'])
+    Ro = np.array(file['tasks']['Ro_layer'])
     #print(L_buoy_all.shape)
     #print(E_def_all.shape)
     #print()
@@ -238,6 +238,8 @@ RS_vw_t = np.mean(np.array(RS_vw), axis=1)
 RS_uv_z = np.mean(np.array(RS_uv), axis=0)
 RS_uw_z = np.mean(np.array(RS_uw), axis=0)
 RS_vw_z = np.mean(np.array(RS_vw), axis=0)
+
+Ro_z = np.mean(np.array(Ro), axis=0)
 
 grad_RS_uv=[]
 for i in range (0, len(z) - 1):
@@ -407,10 +409,16 @@ plt.savefig(save_direc + "dRS_vw_z.pdf")
 plt.close()
 plt.clf()
 
+Ro_tot = 0
+heights = 0
+for i in range(len(Ro_z)):
+    Ro_tot += Ro_z[i]
+    heights += 1
 
-Ro_z = np.mean(np.array(Ro), axis=0)
+Ro_glob_av = Ro_tot / heights
+
 plt.plot(Ro_z, z)
-plt.title(get_title (save_direc))
+plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))
 plt.xlabel(r" Rossby number (Ro) ")
 plt.ylabel(r"$z$")
 plt.ylim(0,ana_t[-1])
@@ -419,16 +427,20 @@ plt.savefig(save_direc + "Ro_z.pdf")
 plt.close()
 plt.clf()
 
-Ro_t = np.mean(np.array(Ro), axis=1)
-plt.plot(Ro_t, ana_t)
-plt.title(get_title (save_direc))
-plt.xlabel(" Rossby number (Ro) ")
-plt.ylabel(r"Time / $\tau_\nu$")
-plt.ylim(0,ana_t[-1])
-plt.xlim(find_limit (Ro_t))
-plt.savefig(save_direc + "Ro_t.pdf")
-plt.close()
-plt.clf()
+# Ro vs. time prob not that useful
+#
+# Ro_t = np.mean(np.array(Ro), axis=1)
+# plt.plot(Ro_t, ana_t)
+# plt.title(get_title (save_direc))
+# plt.xlabel(" Rossby number (Ro) ")
+# plt.ylabel(r"Time / $\tau_\nu$")
+# plt.ylim(0,ana_t[-1])
+# plt.xlim(find_limit (Ro_t))
+# plt.savefig(save_direc + "Ro_t.pdf")
+# plt.close()
+# plt.clf()
+#
+
 ##### END OF DIFFERENTIALS
 
 plt.plot(RS_uv_t, ana_t)

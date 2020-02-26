@@ -198,9 +198,10 @@ analysis.add_task("integ( u, 'y' )/Ly", layout='g', name='u_bar')
 analysis.add_task("integ( v, 'y' )/Ly", layout='g', name='v_bar')
 analysis.add_task("integ( w, 'y' )/Ly", layout='g', name='w_bar')
 
-# Rossby numbers
+# Rossby number
 analysis.add_task(" integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ) / Ly", layout='g', name='Ro_layer')
-analysis.add_task(" integ( integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ), 'z') / (Ly * Lz)", layout='g', name='Ro_vol')
+## Don't need - makes raw_data quite big. Instead, average Ro_layer in plotting script.
+## analysis.add_task(" integ( integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ), 'z') / (Ly * Lz)", layout='g', name='Ro_vol')
 
 # Flux decomposition - Internal energy equation
 analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')

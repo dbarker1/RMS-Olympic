@@ -99,7 +99,7 @@ for item in os.listdir(path_to_sim):
             rot_no = int(item.split("rot")[1])
 
 name = "rot" + str(rot_no+1)
-sp.call("mkdir " + name, shell=True)
+sp.call("mkdir -p " + path_to_sim + "/" + name, shell=True)
 print_msg("Getting anelastic script from Github...")
 sp.call("cd " + name + " && wget https://raw.githubusercontent.com/dbarker1/RMS-Olympic/Reynolds-stress/rot_pseudo2d_anaRB.py", shell=True)
 

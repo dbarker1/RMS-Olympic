@@ -82,16 +82,6 @@ if os.path.exists(save_direc) == False:
 #    print('Error copying:', e)
 
 with h5py.File(direc + "analysis/analysis_" + run_name + ".h5", mode='r') as file:
-	L_cond_all = np.array(file['tasks']['L_cond'])[:,0,:]
-	L_conv_all = np.array(file['tasks']['L_conv'])[:,0,:]
-	L_buoy_all = np.array(file['tasks']['L_buoy'])[:,0,:]
-	L_diss_all = np.array(file['tasks']['L_diss'])[:,0,:]
-	L_KE_all = np.array(file['tasks']['L_KE'])[:,0,:]
-	L_visc_all = np.array(file['tasks']['L_visc'])[:,0,:]
-	L_p_all = np.array(file['tasks']['L_p'])[:,0,:]
-	L_enth_all = np.array(file['tasks']['L_enth'])[:,0,:]
-	E_def_all = np.array(file['tasks']['E_def'])[:,0,:]
-	E_F_conv_all = np.array(file['tasks']['E_F_conv'])[:,0,:]
 	Re = np.array(file['tasks']['Re'])[:,0,:]                   ## NEW!!
 	RS_uv = np.array(file['tasks']['RS_xy'])
 	RS_uw = np.array(file['tasks']['RS_xz'])
@@ -603,16 +593,6 @@ plt.clf()
 #plt.close()
 #plt.clf()
 
-plt.plot(ana_t,E_F_conv_all)
-plt.ylabel(r"$E_conv = \Phi / L_u$")
-plt.xlabel(r"Time / $\tau_\nu$")
-#plt.xlim(0,ana_t[-1])
-#plt.ylim(0, np.max(KE)*1.1)
-plt.title(title_name)
-plt.savefig(save_direc + "E_F_conv")
-plt.close()
-plt.clf()
-
 
 #print(ASI)
 #print(AEI)
@@ -632,103 +612,6 @@ with open(save_direc + 'results.txt', 'w') as f:
 	f.write('E_F_conv\n')
 #    f.write(str(E_F_conv_all[ASI:AEI, 0].mean()) + '\n')
 	f.close()
-
-
-if plot_fluxes:
-
-	mean_L_cond = np.mean(np.array(L_cond_all[ASI:AEI,:]), axis=0)
-	mean_L_conv = np.mean(np.array(L_conv_all[ASI:AEI,:]), axis=0)
-	mean_L_buoy = np.mean(np.array(L_buoy_all[ASI:AEI,:]), axis=0)
-	mean_L_diss = np.mean(np.array(L_diss_all[ASI:AEI,:]), axis=0)
-	#mean_L_cond = np.mean(np.array(L_cond_all[ASI:AEI,:]), axis=0)
-	#mean_L_conv = np.mean(np.array(L_conv_all[ASI:AEI,:]), axis=0)
-	#mean_L_buoy = np.mean(np.array(L_buoy_all[ASI:AEI,:]), axis=0)
-	#mean_L_diss = np.mean(np.array(L_diss_all[ASI:AEI,:]), axis=0)
-
-	mean_L_KE = np.mean(np.array(L_KE_all[ASI:AEI,:]), axis=0)
-	mean_L_visc = np.mean(np.array(L_visc_all[ASI:AEI,:]), axis=0)
-
-	mean_L_p = np.mean(np.array(L_p_all[ASI:AEI,:]), axis=0)
-	mean_L_enth = np.mean(np.array(L_enth_all[ASI:AEI,:]), axis=0)
-
-	mean_E_def = np.mean(np.array(E_def_all[ASI:AEI,:]), axis=0)
-	mean_E_F_conv = np.mean(np.array(E_F_conv_all[ASI:AEI,:]), axis=0)
-
-	mean_L_tot = mean_L_cond + mean_L_conv
-
-	del_L_tot   = np.max(np.absolute(mean_L_tot   - 1))
-	#print("Max variation in L_tot (Internal Energy): {:.5f}".format(del_L_tot))
-
-	plt.plot(mean_L_cond,z, 'r', linestyle='-', label="$L_{cond}$")
-	plt.plot(mean_L_conv,z, 'g', linestyle='-', label="$L_{conv}$")
-	plt.plot(mean_L_tot,z, 'k', linestyle='-',  label="$L_{total}$")
-	#plt.plot(T_mean, z)
-	plt.xlabel("L")
-	plt.ylabel("z")
-	plt.title(title_name)
-	plt.legend()
-	plt.savefig(save_direc + 'intE_fluxes')
-	plt.clf()
-	plt.close()
-
-	#print('HERE2!!')
-	mean_L_other = mean_L_p + mean_L_KE + mean_L_visc
-
-	plt.plot(mean_L_other,z, 'r', linestyle='-', label="$L_{other}$")
-	plt.xlabel("L")
-	plt.ylabel("z")
-	plt.title(title_name)
-	plt.legend()
-	plt.savefig(save_direc + 'Figure_4')
-	plt.clf()
-	plt.close()
-
-	mean_L_tot = mean_L_cond + mean_L_conv + mean_L_buoy + mean_L_diss
-
-	plt.plot(mean_L_cond,z, 'b', linestyle='-', label="$L_{cond}$")
-	#plt.plot(mean_L_conv,z, 'r', linestyle='-', label="$L_{conv}$")
-	plt.plot(mean_L_buoy,z, 'g', linestyle='--',  label="$L_{buoy}$")
-	plt.plot(mean_L_diss,z, 'magenta', linestyle='--',  label="$L_{diss}$")
-	#plt.plot(mean_L_tot,z, 'k', linestyle='-',  label="$L_{total}$")
-	plt.xlabel("L")
-	plt.ylabel("z")
-	plt.title(title_name)
-	plt.legend()
-	plt.savefig(save_direc + 'Figure_5_a')
-	plt.clf()
-	plt.close()
-
-	mean_L_tot = mean_L_KE + mean_L_cond + mean_L_visc + mean_L_enth
-
-	plt.plot(mean_L_enth,z, 'purple', linestyle='-', label="$L_{enth}$")
-	plt.plot(mean_L_cond,z, 'b', linestyle='-', label="$L_{cond}$")
-	plt.plot(mean_L_KE,z, 'orange', linestyle='-', label="$L_{KE}$")
-	plt.plot(mean_L_visc,z, 'pink', linestyle='-', label="$L_{visc}$")
-	plt.plot(mean_L_tot,z, 'k', linestyle='-',  label="$L_{total}$")
-	plt.xlabel("L")
-	plt.ylabel("z")
-	plt.title(title_name)
-	plt.legend()
-	plt.savefig(save_direc + 'Figure_5_b')
-	plt.clf()
-	plt.close()
-
-	mean_L_other = mean_L_p + mean_L_KE + mean_L_visc
-	mean_L_tot = mean_L_other + mean_L_diss + mean_L_KE + mean_L_visc + mean_L_p + mean_L_buoy
-
-	plt.plot(mean_L_other,z, 'k', linestyle='-', label="$L_{other}$")
-	plt.plot(mean_L_diss,z, 'magenta', linestyle='-', label="$L_{diss}$")
-	plt.plot(mean_L_p,z, 'b', linestyle='-',  label="$L_{p}$")
-	plt.plot(mean_L_KE,z, 'orange', linestyle='-', label="$L_{KE}$")
-	plt.plot(mean_L_visc,z, 'pink', linestyle='-', label="$L_{visc}$")
-	plt.plot(mean_L_buoy,z, 'green', linestyle='-',  label="$L_{buoy}$")
-	plt.xlabel("L")
-	plt.ylabel("z")
-	plt.title(title_name)
-	plt.legend()
-	plt.savefig(save_direc + 'Figure_5_c')
-	plt.clf()
-	plt.close()
 
 
 

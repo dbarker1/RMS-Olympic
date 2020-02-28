@@ -264,6 +264,38 @@ print("diagnostic: shape of arrays")
 for arr in arrays:
 	print(arr.shape)
 
+###### Plotting Rossby number ######
+
+Ro = Ro[:,0,:]
+Ro_z = np.mean(np.array(Ro), axis=0)
+
+num_sections = 8
+Ro_sections = []
+heights = []
+
+for i in range(num_sections + 1):
+    heights.append( i / num_sections )
+    Ro_sections.append(Ro_z[ int( i * ( len(Ro_z) - 1) / num_sections ) ])
+    print("Ro at z=" + str( i / num_sections ) + " is " + str(Ro_z[ int( i * ( len(Ro_z) - 1) / num_sections ) ]))
+
+Ro_tot = 0
+count = 0
+for i in range(len(Ro_z)):
+    Ro_tot += Ro_z[i]
+    count += 1
+
+Ro_glob_av = Ro_tot / count
+
+plt.plot(Ro_z, z)
+plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))
+plt.xlabel(r" Rossby number (Ro) ")
+plt.ylabel(r"$z$")
+plt.ylim(0,ana_t[-1])
+plt.xlim(find_limit (Ro_z))
+plt.savefig(save_direc + "Ro_z.pdf")
+plt.close()
+plt.clf()
+
 ## Needs contour over space coordinates
 
 # Contour plots
@@ -274,6 +306,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{uv}\right\rangle $")
 plt.savefig(save_direc + "RS_uv_contour.pdf")
@@ -286,6 +325,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{uw}\right\rangle $")
 plt.savefig(save_direc + "RS_uw_contour.pdf")
@@ -298,6 +344,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{vw}\right\rangle $")
 plt.savefig(save_direc + "RS_vw_contour.pdf")
@@ -310,6 +363,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \frac{\partial\left\langle\overline{uv}\right\rangle} {\partial z}$")
 plt.savefig(save_direc + "dRS_uv_contour.pdf")
@@ -322,6 +382,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \frac{\partial\left\langle\overline{uw}\right\rangle} {\partial z}$")
 plt.savefig(save_direc + "dRS_uw_contour.pdf")
@@ -334,6 +401,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \frac{\partial\left\langle\overline{vw}\right\rangle} {\partial z}$")
 plt.savefig(save_direc + "dRS_vw_contour.pdf")
@@ -403,36 +477,6 @@ plt.ylabel(r"$z$")
 plt.ylim(0,ana_t[-1])
 plt.xlim(find_limit (dRS_vw_z))
 plt.savefig(save_direc + "dRS_vw_z.pdf")
-plt.close()
-plt.clf()
-
-###### Plotting Rossby number ######
-
-Ro = Ro[:,0,:]
-Ro_z = np.mean(np.array(Ro), axis=0)
-
-num_sections = 8
-Ro_sections = []
-
-for i in range(num_sections):
-    Ro_sections.append(Ro_z[ int( i * len(Ro_z) / num_sections ) ])
-    print("Ro at z=" + str( int( i * len(Ro_z) / num_sections ) ) + " is " + str(Ro_z[ int( i * len(Ro_z) / num_sections ) ]))
-
-Ro_tot = 0
-count = 0
-for i in range(len(Ro_z)):
-    Ro_tot += Ro_z[i]
-    count += 1
-
-Ro_glob_av = Ro_tot / count
-
-plt.plot(Ro_z, z)
-plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))
-plt.xlabel(r" Rossby number (Ro) ")
-plt.ylabel(r"$z$")
-plt.ylim(0,ana_t[-1])
-plt.xlim(find_limit (Ro_z))
-plt.savefig(save_direc + "Ro_z.pdf")
 plt.close()
 plt.clf()
 
@@ -557,6 +601,8 @@ plt.savefig(save_direc + "grad_RS_vw.pdf")
 plt.close()
 plt.clf()
 
+print("Heights are " + str(heights))
+
 # Mean flows
 plt.contourf(ana_t, z, np.transpose(u_bar), levels=np.linspace(find_limit (u_bar)[0], find_limit (u_bar)[1], 51), cmap='RdBu_r')
 plt.title(get_title (save_direc))
@@ -564,6 +610,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{u}\right\rangle $")
 plt.savefig(save_direc + "u_bar_contour.pdf")
@@ -576,6 +629,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{v}\right\rangle $")
 plt.savefig(save_direc + "v_bar_contour.pdf")
@@ -588,6 +648,13 @@ plt.xlabel(r"Time, $t_\nu$")
 plt.ylabel(r"$z$")
 plt.xlim(0,ana_t[-1])
 plt.ylim(-np.min(z), np.max(z))
+
+i = 0
+for height in heights:
+    lab = "Ro = " + str(Ro_sections[i])
+    plt.hlines(height, 0, ana_t[-1], linestyles='dashed', label=lab )
+    i += 1
+
 cbar = plt.colorbar()
 cbar.set_label(r"$ \left\langle\overline{w}\right\rangle $")
 plt.savefig(save_direc + "w_bar_contour.pdf")

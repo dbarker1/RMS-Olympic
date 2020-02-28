@@ -200,32 +200,30 @@ analysis.add_task("integ( w, 'y' )/Ly", layout='g', name='w_bar')
 
 # Rossby number
 analysis.add_task(" integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ) / Ly", layout='g', name='Ro_layer')
-## Don't need - makes raw_data quite big. Instead, average Ro_layer in plotting script.
-## analysis.add_task(" integ( integ( sqrt( (dy(w) - vz)**2 + uz**2 + dy(u)**2 ) / T, 'y' ), 'z') / (Ly * Lz)", layout='g', name='Ro_vol')
 
 # Flux decomposition - Internal energy equation
-analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')
-analysis.add_task("integ((-1)*rho_ref*T_ref*sz, 'y')/Ly", layout='g', name='L_cond')
-analysis.add_task("integ(L_buoy - interp(L_buoy,z=0),'y')*(-Pr*theta)/Ly", layout='g', name='L_buoy')
-analysis.add_task("integ(L_diss - interp(L_diss,z=0),'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_diss')
+# analysis.add_task("integ(rho_ref*T_ref*s*w,'y')*Pr/Ly", layout='g', name='L_conv')
+# analysis.add_task("integ((-1)*rho_ref*T_ref*sz, 'y')/Ly", layout='g', name='L_cond')
+# analysis.add_task("integ(L_buoy - interp(L_buoy,z=0),'y')*(-Pr*theta)/Ly", layout='g', name='L_buoy')
+# analysis.add_task("integ(L_diss - interp(L_diss,z=0),'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_diss')
 
 # Flux decomposition - Total energy equaton (L_conv and L_cond already outputted)
-analysis.add_task("integ(0.5*rho_ref*(u*u + v*v + w*w)*w, 'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_KE')
-analysis.add_task("integ( (-1)*rho_ref*( u*uz + v*( vz+dy(w) ) + (2/3)*w*( 2*wz - dy(v) ) ), 'y')*((Pr*Pr*theta)/Ra)/Ly",layout='g',name='L_visc')
-analysis.add_task("integ(p*w, 'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_p')
+# analysis.add_task("integ(0.5*rho_ref*(u*u + v*v + w*w)*w, 'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_KE')
+# analysis.add_task("integ( (-1)*rho_ref*( u*uz + v*( vz+dy(w) ) + (2/3)*w*( 2*wz - dy(v) ) ), 'y')*((Pr*Pr*theta)/Ra)/Ly",layout='g',name='L_visc')
+# analysis.add_task("integ(p*w, 'y')*((Pr*Pr*theta)/Ra)/Ly", layout='g', name='L_p')
 
- # L_enth, the sum of L_conv and L_p
-analysis.add_task("(integ(rho_ref*w*T_ref*s, 'y')*Pr + \
-                    integ(p*w, 'y')*((Pr*Pr*theta)/Ra))/Ly", layout='g', name='L_enth')
+# L_enth, the sum of L_conv and L_p
+# analysis.add_task("(integ(rho_ref*w*T_ref*s, 'y')*Pr + \
+#                    integ(p*w, 'y')*((Pr*Pr*theta)/Ra))/Ly", layout='g', name='L_enth')
 
 # Magnitude of viscous dissipation as calculated by equation 5 (E_def) and equation 24 (E_F_conv) - See C&B '17
-analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
-                                , 'y'), 'z')*(((Pr*Pr*theta)/Ra )/(Ly*Lz)) ", layout='g', name='E_def')
-analysis.add_task(" integ( (integ(rho_ref*T_ref*s*w,'y')/Ly)/T_ref, 'z')*Pr*theta/Lz ", layout='g', name='E_F_conv')
+# analysis.add_task(" integ( integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
+#                                , 'y'), 'z')*(((Pr*Pr*theta)/Ra )/(Ly*Lz)) ", layout='g', name='E_def')
+# analysis.add_task(" integ( (integ(rho_ref*T_ref*s*w,'y')/Ly)/T_ref, 'z')*Pr*theta/Lz ", layout='g', name='E_F_conv')
 
 # E_def as a function of the z direction
-analysis.add_task(" integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
-                                        , 'y')*(((Pr*Pr*theta)/Ra )/(Ly)) ", layout='g', name='E_def_z')
+# analysis.add_task(" integ( 2*rho_ref*( dy(v)*dy(v) + wz*wz + vz*dy(w) - (1/3)*(dy(v)+wz)*(dy(v)+wz) + (1/2)*(dy(u)*dy(u) + uz*uz + vz*vz + dy(w)*dy(w)) ) \
+#                                        , 'y')*(((Pr*Pr*theta)/Ra )/(Ly)) ", layout='g', name='E_def_z')
 
 # Mean KE
 analysis.add_task(" integ( (integ(0.5*(u*u + v*v + w*w)*rho_ref,'y')/Ly), 'z')/Lz", layout='g', name='KE')

@@ -276,6 +276,7 @@ plt.xlabel(r" Rossby number (Ro) ")
 plt.ylabel(r"$z$")
 plt.ylim(0, max(z))
 plt.xlim(find_limit (Ro_z))
+plt.vlines(Ro_glob_av, 0, max(z))
 plt.savefig(save_direc + "Ro_z.pdf")
 plt.close()
 plt.clf()
@@ -502,7 +503,7 @@ plt.savefig(save_direc + "grad_RS_vw.pdf")
 plt.close()
 plt.clf()
 
-print("Scale height divided into " + str(num_sections) + "sections: " + str(heights))
+print("Scale height divided into " + str(num_sections + 1) + " sections: " + str(heights))
 
 # Mean flows
 plt.contourf(ana_t, z, np.transpose(u_bar), levels=np.linspace(find_limit (u_bar)[0], find_limit (u_bar)[1], 51), cmap='RdBu_r')

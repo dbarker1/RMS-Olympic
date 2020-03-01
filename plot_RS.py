@@ -265,11 +265,11 @@ for i in range(len(Ro_z)):
 Ro_glob_av = Ro_tot / count
 
 len_z = len(z)
-with open("Ro_data.txt", "w") as f:
-	f.write("Average global Ro=" + str(Ro_glob_av) + "\n")
-	f.write("Height, Ro_z")
+with open(save_direc + "Ro_data.txt", "w") as f:
+	f.write("Average global Ro=" + str(Ro_glob_av) + "\n\n")
+	f.write("Height, Ro_z\n")
 	for i in range(len_z):
-		f.write( str( i * (max(z) / len_z) ) + ", " + str(Ro_z[i]) )
+		f.write( str( i * (max(z) / len_z) ) + ", " + str(Ro_z[i]) + "\n")
 	f.close()
 
 plt.plot(Ro_z, z)

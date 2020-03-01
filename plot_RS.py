@@ -264,6 +264,13 @@ for i in range(len(Ro_z)):
 
 Ro_glob_av = Ro_tot / count
 
+len_z = len(z)
+with open("Ro_data.txt", "w") as f:
+	f.write("Height, Ro_z")
+	for i in range(len_z):
+		f.write( str( i * (max(z) / len_z) ) + ", " + str(Ro_z[i]) )
+	f.close()
+
 plt.plot(Ro_z, z)
 plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))
 plt.xlabel(r" Rossby number (Ro) ")

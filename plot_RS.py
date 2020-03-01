@@ -247,15 +247,6 @@ for arr in arrays:
 Ro = Ro[:,0,:]
 Ro_z = np.mean(np.array(Ro), axis=0)
 
-num_sections = 8
-Ro_sections = []
-heights = []
-
-for i in range(num_sections + 1):
-	heights.append( i / num_sections )
-	Ro_sections.append(Ro_z[ int( i * ( len(Ro_z) - 1) / num_sections ) ])
-	print("Ro at z=" + str( i / num_sections ) + " is " + str(Ro_z[ int( i * ( len(Ro_z) - 1) / num_sections ) ]))
-
 Ro_tot = 0
 count = 0
 for i in range(len(Ro_z)):
@@ -264,13 +255,20 @@ for i in range(len(Ro_z)):
 
 Ro_glob_av = Ro_tot / count
 
-len_z = len(z)
-with open(save_direc + "Ro_data.txt", "w") as f:
-	f.write("Average global Ro=" + str(Ro_glob_av) + "\n\n")
-	f.write("Height, Ro_z\n")
-	for i in range(len_z):
-		f.write( str( i * (max(z) / len_z) ) + ", " + str(Ro_z[i]) + "\n")
+with open(save_direc + "Ro.dat", "w") as f:
+	f.write("Ro global average: " + str(Ro_glob_av) + "\n\n")
+	f.write("Height, Ro\n")
+	for i in range(len(Ro_z)):
+		f.write(str( i / (len(Ro_z) - 1) ) + "," + str(Ro_z[i]) + "\n")
 	f.close()
+
+num_sections = 8
+heights = []
+Ro_sections = []
+
+for i in range(num_sections + 1):
+	heights.append( i / num_sections )
+	Ro_sections.append(Ro_z[ int( i * ( len(Ro_z) - 1) / num_sections ) ])
 
 plt.plot(Ro_z, z)
 plt.title(get_title (save_direc) + "Ro = " + str(Ro_glob_av))
@@ -504,7 +502,7 @@ plt.savefig(save_direc + "grad_RS_vw.pdf")
 plt.close()
 plt.clf()
 
-print("Heights are " + str(heights))
+print("Scale height divided into " + str(num_sections) + "sections: " + str(heights))
 
 # Mean flows
 plt.contourf(ana_t, z, np.transpose(u_bar), levels=np.linspace(find_limit (u_bar)[0], find_limit (u_bar)[1], 51), cmap='RdBu_r')

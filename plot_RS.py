@@ -266,6 +266,7 @@ Ro_glob_av = Ro_tot / count
 
 len_z = len(z)
 with open("Ro_data.txt", "w") as f:
+	f.write("Average global Ro=" + str(Ro_glob_av) + "\n")
 	f.write("Height, Ro_z")
 	for i in range(len_z):
 		f.write( str( i * (max(z) / len_z) ) + ", " + str(Ro_z[i]) )

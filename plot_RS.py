@@ -250,8 +250,12 @@ Ro_z = np.mean(np.array(Ro), axis=0)
 Ro_tot = 0
 count = 0
 for i in range(len(Ro_z)):
-	Ro_tot += Ro_z[i]
-	count += 1
+	# Chooses the middle half to average over
+	if ( (i / len(Ro_z)) > 0.25 and (i / len(Ro_z)) < 0.75):
+		Ro_tot += Ro_z[i]
+		count += 1
+	else:
+		continue
 
 Ro_glob_av = Ro_tot / count
 
@@ -276,7 +280,7 @@ plt.xlabel(r" Rossby number (Ro) ")
 plt.ylabel(r"$z$")
 plt.ylim(0, max(z))
 plt.xlim(find_limit (Ro_z))
-plt.vlines(Ro_glob_av, 0, max(z))
+plt.vlines(Ro_glob_av, 0, max(z), linestyles='dashed')
 plt.savefig(save_direc + "Ro_z.pdf")
 plt.close()
 plt.clf()

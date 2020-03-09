@@ -193,6 +193,10 @@ analysis.add_task("dz( integ( ((u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly
 analysis.add_task("dz( integ( ((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))), 'y')/Ly )", layout='g', name='RS_xz_dz')
 analysis.add_task("dz( integ( ((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))), 'y')/Ly )", layout='g', name='RS_yz_dz')
 
+# Pressure and pressure differnetial:
+analysis.add_task(" integ(rho_ref, 'y') / Ly", layout='g', name='p')
+analysis.add_task(" integ(dz_rho_ref, 'y') / Ly", layout='g', name='dp')
+
 # Mean flows:
 analysis.add_task("integ( u, 'y' )/Ly", layout='g', name='u_bar')
 analysis.add_task("integ( v, 'y' )/Ly", layout='g', name='v_bar')

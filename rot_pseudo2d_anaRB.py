@@ -193,7 +193,7 @@ analysis.add_task("dz( integ( ((u - (integ(u, 'y')/Ly)) * (v - (integ(v, 'y')/Ly
 analysis.add_task("dz( integ( ((u - (integ(u, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))), 'y')/Ly )", layout='g', name='RS_xz_dz')
 analysis.add_task("dz( integ( ((v - (integ(v, 'y')/Ly)) * (w - (integ(w, 'y')/Ly))), 'y')/Ly )", layout='g', name='RS_yz_dz')
 
-# Pressure and pressure differnetial:
+# Pressure and pressure differential:
 analysis.add_task(" integ(rho_ref, 'y') / Ly", layout='g', name='p')
 analysis.add_task(" integ(dz_rho_ref, 'y') / Ly", layout='g', name='dp')
 
